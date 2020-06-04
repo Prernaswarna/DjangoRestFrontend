@@ -2,46 +2,30 @@ import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
-
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+ 
+import Home from './components/Home';
+import About from './components/About';
+import Contact from './components/Contact';
+import Error from './components/Error';
+import Navigation from './components/Navigation';
+ 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [],
-      loaded: false,
-      placeholder: "Loading"
-    };
-  }
-
-   componentDidMount() {
-    axios
-     .get("https://internet.channeli.in/oauth/authorise/?client_id=Z0D8JmQtXjXJxp63bsnt2HEGvWuw7sSRD19oZ4FO&redirect_url=http://127.0.0.1:8000/user/confirm&state=reachedpage")
-      .then(response => {
-        if (response.status > 400) {
-          return this.setState(() => {
-            return { placeholder: "Something went wrong!" };
-          });
-        }
-        return response.json();
-      })
-      
-      .then(data => {
-        this.setState(() => {
-          return {
-            data,
-            loaded: true
-          };
-        });
-      });
-  }
-
-
   render() {
-    return (
-        this.state.data
+    return (      
+       <BrowserRouter>
+        <div>
+          <Navigation />
+            <Switch>
+             <Route path="/" component={Home} exact/>
+             <Route path="/about" component={About}/>
+             <Route path="/contact" component={Contact}/>
+            <Route component={Error}/>
+           </Switch>
+        </div> 
+      </BrowserRouter>
     );
   }
 }
-
-
+ 
 export default App;
