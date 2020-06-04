@@ -9,6 +9,8 @@ import About from './components/About';
 import Contact from './components/Contact';
 import Error from './components/Error';
 import Navigation from './components/Navigation';
+import Projects from './components/Projects';
+import Individual from './components/Individual';
  
 class App extends Component {
   render() {
@@ -20,6 +22,8 @@ class App extends Component {
              <Route path="/" component={Home} exact/>
              <Route path="/about" component={About}/>
              <Route path="/contact" component={Contact}/>
+	    <Route path = "/projects" component={Projects}/>
+	    <Route path="/individual" component={Individual}/>
             <Route component={Error}/>
            </Switch>
         </div> 

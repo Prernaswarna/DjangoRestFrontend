@@ -3,7 +3,7 @@ import axios from 'axios';
 import ReactDOM from 'react-dom';
 import {Link} from 'react-router-dom';
 
-class Project extends Component
+class Projects extends Component
 {
         constructor()
         {
@@ -26,10 +26,10 @@ render()
           {this.state.data.map(el => (
             <li>
               <Link to={{
-		      pathname : "http://127.0.0.1:3000/individual"
-		      state :{ projectNumber : el.id }
+		      pathname : "/individual",
+		      state :{projectNumber:  el.id }
 		}} >{el.project_name}: {el.wiki} 
-        	</Link>    
+        	</Link> 
 	</li>
           ))}
         </ul>
