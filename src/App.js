@@ -11,7 +11,10 @@ import Error from './components/Error';
 import Navigation from './components/Navigation';
 import Projects from './components/Projects';
 import Individual from './components/Individual';
- 
+import Reportbug from './components/Reportbug';
+import Omniport from './components/Omniport';
+
+
 class App extends Component {
   render() {
     return (      
@@ -24,6 +27,8 @@ class App extends Component {
              <Route path="/contact" component={Contact}/>
 	    <Route path = "/projects" component={Projects}/>
 	    <Route path="/individual" component={Individual}/>
+	    <Route path="/reportbug" component={Reportbug} />
+	    <Route path="/omniport" component={Omniport} />
             <Route component={Error}/>
            </Switch>
         </div> 

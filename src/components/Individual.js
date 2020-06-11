@@ -1,7 +1,8 @@
 import React , {Component} from 'react';
 import axios from 'axios';
 import ReactDOM from 'react-dom';
-
+import {Link} from 'react-router-dom';
+import {Button} from 'semantic-ui-react';
 
 class Individual extends Component
 {
@@ -25,6 +26,7 @@ render()
         return (
      <div>
         <p>{this.state.data.id}: {this.state.data.project_name} , {this.state.data.wiki}</p>
+	<Button as={Link} to={{pathname:"/reportbug",state:{projectNumber:this.state.data.id} }} >Report an Issue</Button>
       </div>
     );
 
