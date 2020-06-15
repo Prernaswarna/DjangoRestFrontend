@@ -13,6 +13,8 @@ import Projects from './components/Projects';
 import Individual from './components/Individual';
 import Reportbug from './components/Reportbug';
 import Omniport from './components/Omniport';
+import Newproject from './components/Newproject';
+import Editproject from './components/Editproject';
 
 
 class App extends Component {
@@ -29,6 +31,8 @@ class App extends Component {
 	    <Route path="/individual" component={Individual}/>
 	    <Route path="/reportbug" component={Reportbug} />
 	    <Route path="/omniport" component={Omniport} />
+	    <Route path="/newproject" component={Newproject} />
+	    <Route path="/editproject" component={Editproject} />
             <Route component={Error}/>
            </Switch>
         </div> 

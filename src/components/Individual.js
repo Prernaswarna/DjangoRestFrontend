@@ -3,6 +3,8 @@ import axios from 'axios';
 import ReactDOM from 'react-dom';
 import {Link} from 'react-router-dom';
 import {Button} from 'semantic-ui-react';
+import CKEditor from 'ckeditor4-react';
+
 
 class Individual extends Component
 {
@@ -25,7 +27,10 @@ render()
 {
         return (
      <div>
-        <p>{this.state.data.id}: {this.state.data.project_name} , {this.state.data.wiki}</p>
+        <p>{this.state.data.id}: {this.state.data.project_name} , 
+	<CKEditor data={this.state.data.wiki} type="inline" readOnly={true} />
+		
+		</p>
 	<Button as={Link} to={{pathname:"/reportbug",state:{projectNumber:this.state.data.id} }} >Report an Issue</Button>
       </div>
     );
