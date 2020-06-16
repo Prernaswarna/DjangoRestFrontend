@@ -7,21 +7,26 @@ import CKEditor from 'ckeditor4-react';
 
 class Projects extends Component
 {
-        constructor()
+        constructor(props)
         {
-                super();
-                this.state = { data :[]};
+                super(props);
+                this.state = { data :[] , isDisplayed:false};
         }
 async componentDidMount()
 {
         const response = await fetch('http://127.0.0.1:8000/project/');
         const json = await response.json();
-        this.setState({data:json});
-        console.log(json);
+        this.setState({data:json})
+	if(this.props.location.state.typeofuser===true)
+		this.state.isDisplayed = !this.state.isDisplayed
+        console.log(this.props.location.state.typeofuser);
+	console.log(this.state.isDisplayed);
 }
 
 render()
 {
+	const style = this.state.isDisplayed ? {} : {display:'none'};
+	console.log(style);
         return (
       <div>
         <ul>
@@ -36,7 +41,7 @@ render()
 		 data= {el.wiki} type="inline" readOnly={true}
 		  />
         	</Link>
-		  <Button as={Link} to={{pathname:"/editproject" , state:{projectNumber:el.id} }} >Edit Project</Button>
+		 <label style={style}>  <Button as={Link} to={{pathname:"/editproject" , state:{projectNumber:el.id , typeofuser:this.props.location.state.typeofuser , userId:this.props.location.state.userId} }} >Edit Project</Button></label>
 	</li>
           ))}
         </ul>

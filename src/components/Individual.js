@@ -32,7 +32,9 @@ render()
 		
 		</p>
 	<Button as={Link} to={{pathname:"/reportbug",state:{projectNumber:this.state.data.id} }} >Report an Issue</Button>
-      </div>
+        <Button as={Link} to={{pathname:"/viewissues",state:{projectNumber:this.state.data.id} }} >View All Issues</Button>
+
+	</div>
     );
 
 }

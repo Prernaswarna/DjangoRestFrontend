@@ -27,16 +27,16 @@ class Editissue extends Component
 
 	async componentDidMount()
 	{	
-	const isuueNum = this.props.location.state.issueId;
-        const response = await fetch(`http://127.0.0.1:8000/bug/${issueNum}`);
+	const issueId = this.props.location.state.issueId;
+        const response = await fetch(`http://127.0.0.1:8000/bug/${issueId}`);
         const json = await response.json();
         this.setState({data:json});
         console.log(json);
-	this.setState({this.state.heading:this.state.data.heading})
-	this.setState({this.state.description:this.state.data.description})
-	this.setState({this.state.tags:this.state.data.tags})
-	this.setState({this.state.reporter:this.state.data.reporter})
-	this.setState({this.state.statusval:this.state.data.statusval})
+	this.setState({heading:this.state.data.heading})
+	this.setState({description:this.state.data.description})
+	this.setState({tags:this.state.data.tags})
+	this.setState({reporter:this.state.data.reporter})
+	this.setState({statusval:this.state.data.statusval})
 	}
 
 
@@ -77,9 +77,9 @@ handleStatusvalChange = event => {
 
 handleSubmit = event => {
   event.preventDefault()
-  const isuueNum = this.props.location.state.issueId;
+  const issueId = this.props.location.state.issueId;
   let formData = { heading: this.state.heading, description: this.state.description , project:this.state.project , tags:this.state.tags ,reporter:this.state.reporter , statusval:this.state.statusval }
-  const response = axios({url:`http://127.0.0.1:8000/bug/${issueNum}` ,method:'PUT', data:formData , withCredentials:true} );
+  const response = axios({url:`http://127.0.0.1:8000/bug/${issueId}/` ,method:'PUT', data:formData , withCredentials:true} );
   console.log(response);
 
 }
