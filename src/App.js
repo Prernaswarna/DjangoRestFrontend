@@ -19,7 +19,7 @@ import Viewissues from './components/Viewissues';
 import Individualissue from './components/Individualissue';
 import Editissue from './components/Editissue';
 import Mypage from './components/Mypage';
-
+import Done from './components/Done';
 
 
 class App extends Component {
@@ -42,6 +42,7 @@ class App extends Component {
 	    <Route path="/individualissue" component={Individualissue} />
 	    <Route path="/editissue" component={Editissue} />
 	    <Route path="/mypage" component={Mypage} />
+	    <Route path="/done" component={Done} />
             <Route component={Error}/>
            </Switch>
         </div> 

@@ -2,7 +2,7 @@ import React , {Component} from 'react';
 import axios from 'axios';
 import ReactDOM from 'react-dom';
 import {Link} from 'react-router-dom';
-import {Button} from 'semantic-ui-react';
+import {Button, Grid , Header} from 'semantic-ui-react';
 
 
 
@@ -11,110 +11,178 @@ class Mypage extends Component
         constructor(props)
         {
                 super(props);
-                this.state = { projects :[], assigned:[] ,reported:[], projectlist:[] , issuelist:[]};
+                this.state = { projects :[], assigned:[] ,reported:[], projectlist:[] , issueslist:[] , isDisplayed:false};
         }
 async componentDidMount()
 {
-        
+	console.log(this.props.location.state.typeofuser);
         const response = await axios({url:'http://127.0.0.1:8000/project/',method:'GET' , withCredentials:true});
         const json = await response.data;
-	const userId = this.props.location.state.userId;
 	const res = await axios({url:'http://127.0.0.1:8000/bug/',method:'GET' , withCredentials:true});
         const js = await res.data;
-        this.setState({projectlist:json});
-	this.setState({issueslist:js});
+        await this.setState({projectlist:json});
+	await this.setState({issueslist:js});
   	let Newarr= [];
         for(let proj in this.state.projectlist)
         {
 		for(let user in this.state.projectlist[proj]["project_members"])
 		{
+			
 		
-                if(this.state.projectlist[proj]["project_members"][user]  == userId)
+                if(this.state.projectlist[proj]["project_members"][user]  == this.props.location.state.userId)
                 {
                         Newarr.push(this.state.projectlist[proj])
 
                 }
 		}
         }
-        this.setState({projects:Newarr});
+         await this.setState({projects:Newarr});
 
 
 
 
 	let newarr= [];
-        for(let bug in this.state.issuelist)
+        for(let bug in this.state.issueslist)
         {
                
 
-                if(this.state.issuelist[bug]["reporter"]  == userId)
+                if(this.state.issueslist[bug]["reporter"]  == this.props.location.state.userId)
                 {
-                        newarr.push(this.state.issuelist[bug])
+                        newarr.push(this.state.issueslist[bug])
 
                 }
                 
         }
-        this.setState({reported:Newarr});
+         await this.setState({reported:newarr});
 
 
 	let arr= [];
-        for(let bug in this.state.issuelist)
+        for(let bug in this.state.issueslist)
         {
 
 
-                if(this.state.issuelist[bug]["assignee"]  == userId)
+                if(this.state.issueslist[bug]["assignee"]  == this.props.location.state.userId)
                 {
-                        arr.push(this.state.issuelist[bug])
+                        arr.push(this.state.issueslist[bug])
 
                 }
 
         }
-        this.setState({assigned:arr});
+         await this.setState({assigned:arr});
 
-
-
+	if(this.props.location.state.typeofuser==true)
+		await this.setState({isDisplayed:true})
+	console.log(this.state.issueslist);
+	console.log(this.state.projectlist);
+	console.log(this.state.projects);
+	console.log(this.state.assigned);
+	console.log(this.state.reported);
+	console.log(this.props.location.state.userId);
+	console.log(this.props.location.state.typeofuser);
+	
 }
 
 render()
 {
-        return ( <div><p>Projects:</p>
-        <ul>
+	const style = this.state.isDisplayed ? {display:''} : {display:'none'} 
+        return (<div><Header as='h3'>Projects</Header>
+        <Grid columns={2} divided>
+	<Grid.Row>
+	<Grid.Column>
+		Project Id
+	</Grid.Column>
+	<Grid.Column>
+		Project Name
+	</Grid.Column>
+	</Grid.Row>
+	
           {this.state.projects.map(el => (
-            <li>
-             Project id : {el.id} , Project Name : {el.project_name} 
+            <Grid.Row>
+	    <Grid.Column>
+              {el.id} 
+	    </Grid.Column>
+	    <Grid.Column>
+		 {el.project_name} 
+	    </Grid.Column>
+            </Grid.Row>
        
-        </li>
           ))}
-        </ul>
+        </Grid>
 	
 	
 	
-	<p>Reported Issues</p>
-        <ul>
-          {this.state.reported.map(el => (
-            <li>
-             Issue id : {el.id} , Issue Name : {el.heading} ,Issue Description : {el.description}
+	<Header as='h3'>Reported Issues</Header>
+	<Grid columns={3} divided>
+        <Grid.Row>
+        <Grid.Column>
+                Issue Id
+        </Grid.Column>
+        <Grid.Column>
+                Issue Title
+        </Grid.Column>
+	<Grid.Column>
+		Issue Description
+	</Grid.Column>
+        </Grid.Row>
 
-        </li>
+  
+          {this.state.reported.map(el => (
+            <Grid.Row>
+	<Grid.Column>
+              {el.id}
+	</Grid.Column>
+	<Grid.Column>
+	 {el.heading} 
+	</Grid.Column>
+	<Grid.Column>
+	{el.description}
+	</Grid.Column>
+
+	</Grid.Row>
           ))}
-        </ul>
+        </Grid>
         
 
 
 	
-	<p>Assigned Issues</p>
-        <ul>
-          {this.state.assigned.map(el => (
-            <li>
-             Issue id : {el.id} , Issue Name : {el.heading} , Issue Description: {el.description}
+	<Header as='h3'>Assigned Issues</Header>
+	<Grid columns={3} divided>
+        <Grid.Row>
+        <Grid.Column>
+                Issue Id
+        </Grid.Column>
+        <Grid.Column>
+                Issue Title
+        </Grid.Column>
+	<Grid.Column>
+		Issue Description
+	</Grid.Column>
+        </Grid.Row>
 
-        </li>
+        
+          {this.state.assigned.map(el => (
+            <Grid.Row>
+	<Grid.Column>
+              {el.id}
+	</Grid.Column>
+	<Grid.Column>
+	{el.heading} 
+	</Grid.Column>
+	<Grid.Column>
+	{el.description}
+	</Grid.Column>
+
+        </Grid.Row>
           ))}
-        </ul>
+        </Grid>
         
 	
 
 
 	<Button as={Link} to={{pathname:"/projects" , state:{userId:this.props.location.state.userId , typeofuser:this.props.location.state.typeofuser} }} >View All Projects</Button>
+
+
+	<Button style={style} as={Link} to={{pathname:"/about" , state:{userId:this.props.location.state.userId , typeofuser:this.props.location.state.typeofuser} }} >View All Users</Button>
 	
 	</div>
 	

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Dropdown, Form } from 'semantic-ui-react';
 import CKEditor from 'ckeditor4-react';
 import PropTypes from 'prop-types';
+import {Redirect} from 'react-router-dom';
 
 
 axios.defaults.xsrfCookieName = 'frontend_csrftoken'
@@ -19,8 +20,10 @@ class Newproject extends Component
                 project_name : "Not provided",
                 wiki : "<p>Not provided</p>",
                 project_members:[],
-                submittedData: []
-
+                submittedData: [],
+		redirect :false,
+		userId:0,
+		typeofuser:false,
                 };
                 this.handleSubmit = this.handleSubmit.bind(this);
 		this.onEditorChange = this.onEditorChange.bind(this);
@@ -31,8 +34,11 @@ async componentDidMount()
 	const response = await axios({ url : 'http://127.0.0.1:8000/user/' , method:'get' , withCredentials:true})
 	let arr = [];
 	const ul = response.data;
-	console.log(ul);
-	console.log("Done");
+	const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
+
+        const js = await res.data;
+        this.setState({typeofuser:js.typeofuser})
+        this.setState({userId:js.userId});
 	for(let user in ul)
 	{
 		let dict = {};
@@ -40,7 +46,7 @@ async componentDidMount()
 		dict["value"] = ul[user]["id"];
 		dict["text"] = ul[user]["username"];
 		arr.push(dict);
-		console.log(dict);
+
 	}
 	this.setState({
 		userlist:arr
@@ -79,21 +85,30 @@ handleMemberChange=(event , data) => {
 
 
 
-
-handleSubmit = event => {
+ handleSubmit = event => {
   event.preventDefault()
   let formData = { project_name: this.state.project_name, wiki: this.state.wiki , project_members:this.state.project_members }
   const response = axios({url:'http://127.0.0.1:8000/project/' ,method:'POST', data:formData , withCredentials:true} );
   console.log(response);
-
+  this.setState({redirect:true})
+/*if(response.status==200)
+{
+	this.setState({redirect:true})
+}
+if(response.status==201)
+{
+	this.setState({redirect:true})
+}*/
 }
 
 
-listOfSubmissions = () => {
-    return this.state.submittedData.map(data => {
-      return <div><span>{data.project_name}</span> <span>{data.wiki}</span> <span>{data.project_members}</span> </div>
-    })
-  }
+
+renderRedirect= () =>{
+	if(this.state.redirect==true)
+	{
+		return <Redirect to={{pathname:'/done'  }}/>
+	}
+}
 
 
 render()
@@ -121,11 +136,11 @@ render()
   </Form.Field>
 
 
-<input type="submit" />
+<input type="submit" />		
+		{this.renderRedirect()}
   </Form>
-   {this.listOfSubmissions()}
-</div>
-);
+   </div>
+	);
 }
 
 }

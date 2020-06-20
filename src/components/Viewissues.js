@@ -2,7 +2,7 @@ import React , {Component} from 'react';
 import axios from 'axios';
 import ReactDOM from 'react-dom';
 import {Link} from 'react-router-dom';
-import {Button} from 'semantic-ui-react';
+import {Button, Grid} from 'semantic-ui-react';
 
 
 
@@ -12,7 +12,9 @@ class Viewissues extends Component
         {
                 super();
                 this.state = { projectlist :[],
-			arr:[]
+			arr:[],
+			typeofuser:false,
+			userId:0,
 		};
         }
 async componentDidMount()
@@ -21,7 +23,7 @@ async componentDidMount()
         const response = await axios({url:'http://127.0.0.1:8000/bug/',method:'GET' , withCredentials:true});
         const json = await response.data;
         this.setState({projectlist:json});
-        console.log(json);
+       
 	let Newarr= [];
 	for(let proj in this.state.projectlist)
 	{
@@ -34,6 +36,11 @@ async componentDidMount()
 		}
 	}
 	this.setState({arr:Newarr});
+	const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
+
+        const js = await res.data;
+        this.setState({typeofuser:js.typeofuser})
+        this.setState({userId:js.userId});
 	
 }
 
@@ -43,19 +50,39 @@ render()
 	const projectId = this.props.location.state.projectNumber;
         return (
       <div>
-        <ul>
+        <Grid columns={3} divided>
+	<Grid.Row>
+	<Grid.Column>
+		Issue Id
+	</Grid.Column>
+	<Grid.Column>
+		Project Id
+	</Grid.Column>
+	<Grid.Column>
+		Issue Description
+	</Grid.Column>
+	</Grid.Row>
           {this.state.arr.map(el => (
-            <li>
-             <Link to={{
+            <Grid.Row>
+	    <Grid.Column>
+	    {el.id}
+	     </Grid.Column>
+	     <Grid.Column>
+		    {el.project}
+	     </Grid.Column>
+	     <Grid.Column>
+		  <Link to={{
                       pathname : "/individualissue",
-                      state :{issueId:  el.id }
+                      state :{issueId:  el.id ,projectNumber:this.props.location.state.projectNumber}
                 }} >
 
-		  Issue id : {el.id} , Project Id : {el.project} , Title : {el.heading}
-	</Link>
-        </li>
+		 {el.heading}
+		 </Link>
+	     </Grid.Column>
+	
+        </Grid.Row>
           ))}
-        </ul>
+        </Grid>
         <Button as={Link} to={{pathname:"/reportbug" , state:{projectNumber:projectId} }} >Add Issue</Button>
 
       </div>

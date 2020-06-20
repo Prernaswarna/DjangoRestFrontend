@@ -1,7 +1,7 @@
 import React , {Component} from 'react';
 import axios from 'axios';
 import ReactDOM from 'react-dom';
-import {Link} from 'react-router-dom';
+import {Redirect ,Link} from 'react-router-dom';
 import {Button} from 'semantic-ui-react';
 import { Dropdown, Form } from 'semantic-ui-react';
 import CKEditor from 'ckeditor4-react';
@@ -23,8 +23,10 @@ class Editproject extends Component
                 project_name : "Not provided",
                 wiki : "<p>Not provided</p>",
                 project_members:[],
-                submittedData: []
-
+                submittedData: [],
+		redirect : false,
+		typeofuser:false,
+		userId:0
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
                 this.onEditorChange = this.onEditorChange.bind(this);
@@ -39,7 +41,7 @@ async componentDidMount()
 	this.setState({project_name:this.state.data.project_name})
 	this.setState({wiki:this.state.data.wiki})
 	this.setState({project_members:this.state.data.project_members})
-	console.log(this.state.project_members)	
+	
 
 
 
@@ -59,6 +61,12 @@ async componentDidMount()
         this.setState({
                 userlist:arr
         })
+
+	const re = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
+
+        const js = await re.data;
+        this.setState({typeofuser:js.typeofuser})
+        this.setState({userId:js.userId});
 
 }
 
@@ -94,14 +102,17 @@ handleSubmit = event => {
   let formData = { project_name: this.state.project_name, wiki: this.state.wiki , project_members:this.state.project_members }
   const response = axios({url:`http://127.0.0.1:8000/project/${projectId}/` ,method:'PUT', data:formData , withCredentials:true} );
   console.log(response);
+  this.setState({redirect:true});
 
 }
 
-listOfSubmissions = () => {
-    return this.state.submittedData.map(data => {
-      return <div><span>{data.project_name}</span> <span>{data.wiki}</span> <span>{data.project_members}</span> </div>
-    })
-  }
+renderRedirect= () =>{
+        if(this.state.redirect==true)
+        {
+                return <Redirect to={{pathname:'/done'  }}/>
+        }
+}
+
 
 
 
@@ -131,8 +142,9 @@ render()
 
 
 <input type="submit" />
+		{this.renderRedirect()}
   </Form>
-   {this.listOfSubmissions()}
+   
 </div>
 );
 }

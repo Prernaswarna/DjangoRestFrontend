@@ -2,7 +2,7 @@ import React , {Component} from 'react';
 import axios from 'axios';
 import ReactDOM from 'react-dom';
 import {Link} from 'react-router-dom';
-import {Button} from 'semantic-ui-react';
+import {Grid , Button} from 'semantic-ui-react';
 import CKEditor from 'ckeditor4-react';
 
 class Projects extends Component
@@ -10,42 +10,67 @@ class Projects extends Component
         constructor(props)
         {
                 super(props);
-                this.state = { data :[] , isDisplayed:false};
+                this.state = { data :[] , typeofuser:false ,userId:0 };
         }
 async componentDidMount()
 {
         const response = await fetch('http://127.0.0.1:8000/project/');
         const json = await response.json();
         this.setState({data:json})
-	if(this.props.location.state.typeofuser===true)
-		this.state.isDisplayed = !this.state.isDisplayed
-        console.log(this.props.location.state.typeofuser);
-	console.log(this.state.isDisplayed);
+	
+	const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
+
+        const js = await res.data;
+        this.setState({typeofuser:js.typeofuser})
+	this.setState({userId:js.userId});
+	/*console.log(this.state.isDisplayed);
+	console.log(this.props.location.state.userId);
+	console.log(this.props.location.state.typeofuser);*/
+	console.log(js);
 }
 
 render()
 {
-	const style = this.state.isDisplayed ? {} : {display:'none'};
-	console.log(style);
+		
         return (
       <div>
-        <ul>
+        <Grid columns ={3} divided>
+	<Grid.Row>
+        <Grid.Column>
+                Project Id
+        </Grid.Column>
+        <Grid.Column>
+                Project Name
+        </Grid.Column>
+        <Grid.Column>
+                Wiki
+        </Grid.Column>
+        </Grid.Row>
+	
           {this.state.data.map(el => (
-            <li>
+             <Grid.Row>
+	        <Grid.Column>
+			{el.id}
+		</Grid.Column>
+		<Grid.Column>
               <Link to={{
 		      pathname : "/individual",
 		      state :{projectNumber:  el.id }
 		}} >
-		  {el.project_name}: 
+		  {el.project_name} 
+		</Link>
+		</Grid.Column>
+		<Grid.Column>
 		  <CKEditor 
 		 data= {el.wiki} type="inline" readOnly={true}
 		  />
-        	</Link>
-		 <label style={style}>  <Button as={Link} to={{pathname:"/editproject" , state:{projectNumber:el.id , typeofuser:this.props.location.state.typeofuser , userId:this.props.location.state.userId} }} >Edit Project</Button></label>
-	</li>
+		</Grid.Column>
+        	
+		 
+		 </Grid.Row>
           ))}
-        </ul>
-	<Button as={Link} to={{pathname:"/newproject"}} >Add Project</Button>
+        </Grid>
+	<Button as={Link} to={{pathname:"/newproject" }} >Add Project</Button>
 
       </div>
     );

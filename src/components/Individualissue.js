@@ -2,7 +2,7 @@ import React , {Component} from 'react';
 import axios from 'axios';
 import ReactDOM from 'react-dom';
 import {Link} from 'react-router-dom';
-import {Button} from 'semantic-ui-react';
+import {Button , Segment} from 'semantic-ui-react';
 
 
 
@@ -11,33 +11,54 @@ class Individualissue extends Component
         constructor(props)
         {
                 super(props);
-                this.state = { data :[]};
+                this.state = { data :[],projectinfo:[],isDisplayed:false,typeofuser:false,userId:0};
         }
 async componentDidMount()
 {
         const issueId = this.props.location.state.issueId;
         const response = await fetch(`http://127.0.0.1:8000/bug/${issueId}`);
+	const projectId = this.props.location.state.projectNumber;
+	const res = await fetch(`http://127.0.0.1:8000/project/${projectId}`);
         const json = await response.json();
+	const js = await res.json();
         this.setState({data:json});
-        console.log({issueId});
-        console.log(json);
+	this.setState({projectinfo:js});
+	const resp = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
+
+        const j = await resp.data;
+        this.setState({typeofuser:j.typeofuser})
+        this.setState({userId:j.userId});
+	for(let user in this.state.projectinfo.project_members)
+        {
+                console.log(this.state.projectinfo.project_members[user]);
+                if(this.state.userId == this.state.projectinfo.project_members[user])
+                {
+                        this.setState({isDisplayed:true});
+                }
+        }
+        if(this.state.typeofuser==true)
+        {
+                this.setState({isDisplayed:true});
+        }
+
 }
 
 render()
 {
+	 const style= this.state.isDisplayed ? {display:''} : {display:'none'}
         return (
      <div>
-		<div><p>Issue Id :{this.state.data.id}</p> </div>
-		<div><p>Project Id:{this.state.data.project}</p> </div>
-		<div><p>Title : {this.state.data.heading} </p></div>
-		<div><p>Description : {this.state.data.description}</p> </div>
-		<div><p>Document : {this.state.data.doc}</p> </div>
-		<div><p>Tags : {this.state.data.tags}</p> </div>
-		<div><p>Status : {this.state.data.statusval} </p></div>
-		<div><p>Reporter : {this.state.data.reporter} </p></div>
-		<div><p>Assignee : {this.state.data.assignee} </p></div>
+		<Segment vertical>Issue Id :{this.state.data.id}</Segment> 
+		<Segment vertical>Project Id:{this.state.data.project}</Segment>
+		<Segment vertical>Title : {this.state.data.heading} </Segment>
+		<Segment vertical>Description : {this.state.data.description}</Segment>
+		<Segment vertical>Document : {this.state.data.doc}</Segment>
+		<Segment vertical>Tags : {this.state.data.tags}</Segment>
+		<Segment vertical>Status : {this.state.data.statusval} </Segment>
+		<Segment vertical>Reporter : {this.state.data.reporter} </Segment>
+		<Segment vertical>Assignee : {this.state.data.assignee} </Segment>
                         
-        <Button as={Link} to={{pathname:"/editissue",state:{issueId:this.state.data.id, projectNumber:this.state.data.project} }} >Edit Issue</Button>
+        <Button style={style} as={Link} to={{pathname:"/editissue",state:{issueId:this.state.data.id, projectNumber:this.state.data.project} }} >Edit Issue</Button>
          </div>
     );
 
