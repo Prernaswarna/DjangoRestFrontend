@@ -1,7 +1,7 @@
 import React ,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import { Dropdown, Form } from 'semantic-ui-react';
+import {Button, Dropdown, Form } from 'semantic-ui-react';
 import CKEditor from 'ckeditor4-react';
 import PropTypes from 'prop-types';
 import {Redirect} from 'react-router-dom';
@@ -136,7 +136,7 @@ render()
   </Form.Field>
 
 
-<input type="submit" />		
+<Button type="submit" >Submit</Button>		
 		{this.renderRedirect()}
   </Form>
    </div>

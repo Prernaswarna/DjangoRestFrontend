@@ -20,6 +20,7 @@ import Individualissue from './components/Individualissue';
 import Editissue from './components/Editissue';
 import Mypage from './components/Mypage';
 import Done from './components/Done';
+import Main from './components/Comments';
 
 
 class App extends Component {
@@ -43,6 +44,7 @@ class App extends Component {
 	    <Route path="/editissue" component={Editissue} />
 	    <Route path="/mypage" component={Mypage} />
 	    <Route path="/done" component={Done} />
+	    <Route path="/comments" component={Main} />
             <Route component={Error}/>
            </Switch>
         </div> 

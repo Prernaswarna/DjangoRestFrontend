@@ -141,7 +141,7 @@ render()
   </Form.Field>
 
 
-<input type="submit" />
+<Button type="submit" >Submit</Button>
 		{this.renderRedirect()}
   </Form>
    

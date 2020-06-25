@@ -59,7 +59,10 @@ render()
 		<Segment vertical>Assignee : {this.state.data.assignee} </Segment>
                         
         <Button style={style} as={Link} to={{pathname:"/editissue",state:{issueId:this.state.data.id, projectNumber:this.state.data.project} }} >Edit Issue</Button>
-         </div>
+<Button  as={Link} to={{pathname:"/comments",state:{issueId:this.state.data.id, userId:this.state.userId} }} >Comment</Button>
+
+		
+</div>
     );
 
 }

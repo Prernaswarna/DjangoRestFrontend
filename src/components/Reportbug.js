@@ -1,7 +1,7 @@
 import React ,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import {Form} from 'semantic-ui-react';
+import {Form , Button} from 'semantic-ui-react';
 import {Redirect} from 'react-router-dom';
 
 
@@ -118,7 +118,7 @@ render()
 	<label>Status</label>
       <input type="text"  value={this.state.statusval}  readonly />
 	</Form.Field>
-    <input type="submit" />
+    <Button type="submit">Submit</Button>
 	{this.renderRedirect()}
   </Form>
    

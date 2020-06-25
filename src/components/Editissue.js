@@ -1,7 +1,7 @@
 import React ,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import {Form,Dropdown} from 'semantic-ui-react';
+import {Button ,Form,Dropdown} from 'semantic-ui-react';
 import {Redirect} from 'react-router-dom';
 
 axios.defaults.xsrfCookieName = 'frontend_csrftoken'
@@ -173,7 +173,7 @@ render()
         <label>Status</label>
       <input type="text"  value={this.state.statusval}  readonly />
         </Form.Field>
-    <input type="submit" />
+    <Button type="submit" >Submit</Button>
 		{this.renderRedirect()}
 
   </Form>
