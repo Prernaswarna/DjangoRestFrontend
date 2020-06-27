@@ -47,10 +47,11 @@ async componentDidMount()
 
 render()
 {
+	const s1 = this.state.arr && this.state.arr.length>0 ? {display:''} : {display:'none'}
 	const projectId = this.props.location.state.projectNumber;
         return (
       <div>
-        <Grid columns={3} divided>
+        <Grid columns={3} style={s1} divided>
 	<Grid.Row>
 	<Grid.Column>
 		Issue Id

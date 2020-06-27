@@ -24,6 +24,7 @@ class Newproject extends Component
 		redirect :false,
 		userId:0,
 		typeofuser:false,
+		isLoggedIn:false,
                 };
                 this.handleSubmit = this.handleSubmit.bind(this);
 		this.onEditorChange = this.onEditorChange.bind(this);
@@ -31,14 +32,23 @@ class Newproject extends Component
         }
 async componentDidMount()
 {
-	const response = await axios({ url : 'http://127.0.0.1:8000/user/' , method:'get' , withCredentials:true})
-	let arr = [];
-	const ul = response.data;
-	const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
+	 const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
 
         const js = await res.data;
         this.setState({typeofuser:js.typeofuser})
         this.setState({userId:js.userId});
+	if(this.state.userId==0)
+        {
+                window.location.href="http://127.0.0.1:3000/";
+        }
+	else
+	{
+		this.setState({isLoggedIn:true});
+	}
+
+	const response = await axios({ url : 'http://127.0.0.1:8000/user/' , method:'get' , withCredentials:true})
+	let arr = [];
+	const ul = response.data;
 	for(let user in ul)
 	{
 		let dict = {};
@@ -113,8 +123,9 @@ renderRedirect= () =>{
 
 render()
 {
+	const styl= this.state.isLoggedIn ? {display:''} : {display:'none'}
         return(
-        <div>
+        <div style={styl}>
         <Form onSubmit={event => this.handleSubmit(event)}>
 	<Form.Field required>
       <label>Project-name</label>

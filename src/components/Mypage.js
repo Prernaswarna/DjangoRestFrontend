@@ -84,9 +84,13 @@ async componentDidMount()
 
 render()
 {
-	const style = this.state.isDisplayed ? {display:''} : {display:'none'} 
-        return (<div><Header as='h3'>Projects</Header>
-        <Grid columns={2} divided>
+	const style = this.state.isDisplayed ? {display:''} : {display:'none'}
+	const s1 = this.state.projects && this.state.projects.length>0 ? {display:''}:{display:'none'}
+	const s2 = this.state.assigned && this.state.assigned.length>0 ? {display:''} : {display:'none'}
+	const s3 = this.state.reported && this.state.reported.length>0 ? {display:''} : {display:'none'}
+	
+        return (<div><Header as='h3' style={s1}>Projects</Header>
+        <Grid style={s1} columns={2} divided>
 	<Grid.Row>
 	<Grid.Column>
 		Project Id
@@ -111,8 +115,8 @@ render()
 	
 	
 	
-	<Header as='h3'>Reported Issues</Header>
-	<Grid columns={3} divided>
+	<Header as='h3' style={s3}>Reported Issues</Header>
+	<Grid style={s3} columns={3} divided>
         <Grid.Row>
         <Grid.Column>
                 Issue Id
@@ -145,8 +149,8 @@ render()
 
 
 	
-	<Header as='h3'>Assigned Issues</Header>
-	<Grid columns={3} divided>
+	<Header style={s2} as='h3'>Assigned Issues</Header>
+	<Grid style={s2} columns={3} divided>
         <Grid.Row>
         <Grid.Column>
                 Issue Id

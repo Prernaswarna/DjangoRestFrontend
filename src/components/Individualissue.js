@@ -1,7 +1,7 @@
 import React , {Component} from 'react';
 import axios from 'axios';
 import ReactDOM from 'react-dom';
-import {Link} from 'react-router-dom';
+import {Link,Redirect} from 'react-router-dom';
 import {Button , Segment} from 'semantic-ui-react';
 
 
@@ -12,7 +12,8 @@ class Individualissue extends Component
         {
                 super(props);
                 this.state = { data :[],projectinfo:[],isDisplayed:false,typeofuser:false,userId:0};
-        }
+        	this.deleteIssue = this.deleteIssue.bind(this);
+	}
 async componentDidMount()
 {
         const issueId = this.props.location.state.issueId;
@@ -43,6 +44,24 @@ async componentDidMount()
 
 }
 
+deleteIssue = event => {
+  event.preventDefault()
+        const issueId = this.props.location.state.issueId;
+  const response = axios({url:`http://127.0.0.1:8000/bug/${issueId}` ,method:'DELETE' , withCredentials:true} );
+  console.log(response);
+          this.setState({redirect:true});
+
+
+}
+
+renderRedirect= () =>{
+        if(this.state.redirect==true)
+        {
+                return <Redirect to={{pathname:'/deletedone'  }}/>
+        }
+}
+
+
 render()
 {
 	 const style= this.state.isDisplayed ? {display:''} : {display:'none'}
@@ -61,7 +80,10 @@ render()
         <Button style={style} as={Link} to={{pathname:"/editissue",state:{issueId:this.state.data.id, projectNumber:this.state.data.project} }} >Edit Issue</Button>
 <Button  as={Link} to={{pathname:"/comments",state:{issueId:this.state.data.id, userId:this.state.userId} }} >Comment</Button>
 
-		
+		<Button style={style} onClick={event=>this.deleteIssue(event)} >Delete Issue</Button>
+                {this.renderRedirect()}
+
+
 </div>
     );
 

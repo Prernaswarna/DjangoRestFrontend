@@ -103,13 +103,30 @@ class Comments extends Component
                 creator : 1,
                 body:"Not provided",
                 commentlist: [],
-               
+                isLoggedIn:false,
 		};
                 this.handleSubmit = this.handleSubmit.bind(this);
         }
 
 	async componentDidMount()
 	{
+	 const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
+
+        const js =  await res.data;
+        console.log(res.data);
+        this.setState({typeofuser:js.typeofuser})
+        this.setState({userId:js.userId});
+        if(this.state.userId==0)
+        {
+
+                window.location.href="http://127.0.0.1:3000/";
+        }
+        else
+        {
+                this.setState({isLoggedIn:true});
+        }
+
+
 	 const response = await fetch('http://127.0.0.1:8000/comment/');
         const json = await response.json();
        console.log(this.state.bug);
@@ -126,10 +143,7 @@ class Comments extends Component
 	}
 	this.setState({commentlist:arr});
 	console.log(this.state.commentlist);
-	const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
-
-        const js = await res.data;
-        this.setState({creator:js.userId});
+	
 	
 	}
 
@@ -163,8 +177,9 @@ console.log(this.props.websocket);
 
 render()
 {
+	const style= this.state.isLoggedIn ? {display:''} : {display:'none'}
         return(
-        <div>
+        <div style={style}>
 	
 	
         <Form onSubmit={event => this.handleSubmit(event)}>

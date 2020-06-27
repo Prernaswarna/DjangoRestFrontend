@@ -10,31 +10,47 @@ class Projects extends Component
         constructor(props)
         {
                 super(props);
-                this.state = { data :[] , typeofuser:false ,userId:0 };
+                this.state = { data :[] , typeofuser:false ,userId:0,isLoggedIn:false };
+		
+
         }
 async componentDidMount()
 {
-        const response = await fetch('http://127.0.0.1:8000/project/');
+      	 const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
+
+        const js =  await res.data;
+        console.log(res.data);
+        this.setState({typeofuser:js.typeofuser})
+        this.setState({userId:js.userId});
+        if(this.state.userId==0)
+        {
+                
+                window.location.href="http://127.0.0.1:3000/";
+        }
+	else
+	{
+		this.setState({isLoggedIn:true});
+	}
+ 
+	console.log(this.state.isLoggedIn);
+	const response = await fetch('http://127.0.0.1:8000/project/');
         const json = await response.json();
         this.setState({data:json})
 	
-	const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
-
-        const js = await res.data;
-        this.setState({typeofuser:js.typeofuser})
-	this.setState({userId:js.userId});
 	/*console.log(this.state.isDisplayed);
 	console.log(this.props.location.state.userId);
 	console.log(this.props.location.state.typeofuser);*/
-	console.log(js);
+	//console.log(js);
 }
 
 render()
 {
-		
-        return (
-      <div>
-        <Grid columns ={3} divided>
+	const style= this.state.isLoggedIn ? {display:''} : {display:'none'}		
+        const s1 = this.state.data && this.state.data.length>0 ? {display:''} : {display:'none'}
+	return (
+	
+      <div style={style}>
+        <Grid columns ={3} style={s1} divided>
 	<Grid.Row>
         <Grid.Column>
                 Project Id

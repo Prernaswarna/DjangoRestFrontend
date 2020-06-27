@@ -21,6 +21,8 @@ import Editissue from './components/Editissue';
 import Mypage from './components/Mypage';
 import Done from './components/Done';
 import Main from './components/Comments';
+import Logout from './components/Logout';
+import Deletedone from './components/Deletedone';
 
 
 class App extends Component {
@@ -45,6 +47,8 @@ class App extends Component {
 	    <Route path="/mypage" component={Mypage} />
 	    <Route path="/done" component={Done} />
 	    <Route path="/comments" component={Main} />
+	    <Route path="/logout" component={Logout} />
+	    <Route path="/deletedone" component={Deletedone} />
             <Route component={Error}/>
            </Switch>
         </div> 

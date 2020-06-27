@@ -41,10 +41,17 @@ async componentDidMount()
 
 render()
 {
+	
 	const style = this.state.typeofuser!="False" ? { } : {display:'none'}
 	const style2 = this.state.typeofuser!="False" ? {display:'none'} : {}
 
-        return (<div><Button style={style} as={Link} to={{pathname:"/mypage" , state:{userId:this.state.userId , typeofuser:this.state.typeofuser} }} >My Page</Button>
+        return (<div style={{textAlign:'center' , margin:'auto'}}>
+		<br />
+		<br />
+		<h2 style={{textAlign:'center'}}>Continue to My Page</h2>
+		<br />
+		<br />
+		<Button style={style} as={Link} to={{pathname:"/mypage" , state:{userId:this.state.userId , typeofuser:this.state.typeofuser} }} >My Page</Button>
 	<Button loading style={style2}>Loading</Button></div>
 );
 
