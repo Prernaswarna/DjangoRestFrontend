@@ -1,7 +1,7 @@
 import React , {Component} from 'react';
 import axios from 'axios';
 import ReactDOM from 'react-dom';
-import {Grid , Button} from 'semantic-ui-react'; 
+import {Grid , Button , Segment} from 'semantic-ui-react'; 
 import {Link} from 'react-router-dom';
 
 class About extends Component

@@ -1,7 +1,7 @@
 import React ,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import {Button ,Form,Dropdown} from 'semantic-ui-react';
+import {Segment , Image , Button ,Form,Dropdown} from 'semantic-ui-react';
 import {Redirect} from 'react-router-dom';
 
 axios.defaults.xsrfCookieName = 'frontend_csrftoken'
@@ -27,7 +27,8 @@ class Editissue extends Component
 		userlist:[]
                 };
                 this.handleSubmit = this.handleSubmit.bind(this);
-        }
+        	this.fileInput = React.createRef();
+	}
 
 
 	async componentDidMount()
@@ -68,7 +69,7 @@ class Editissue extends Component
 	}
 
 
-handleHeadingChange = event => {
+/*handleHeadingChange = event => {
   this.setState({
     heading: event.target.value
   })
@@ -86,7 +87,7 @@ handleTagsChange = event => {
   this.setState({
     tags: event.target.value
   })
-}
+}*/
 
 
 handleReporterChange = event => {
@@ -115,7 +116,24 @@ handleStatusvalChange = event => {
 handleSubmit = event => {
   event.preventDefault()
   const issueId = this.props.location.state.issueId;
-  let formData = { heading: this.state.heading, description: this.state.description , project:this.state.project , tags:this.state.tags ,reporter:this.state.reporter , assignee:this.state.assignee ,statusval:this.state.statusval }
+  const formData = new FormData();
+
+  formData.append("heading" , this.state.heading);
+        formData.append("description" , this.state.description);
+        formData.append("project" , this.state.project);
+        formData.append("tags" , this.state.tags);
+        formData.append("reporter" , this.state.reporter);
+	if(this.state.assignee!=null)
+	{
+	formData.append("assignee" , this.state.assignee);
+	}
+        formData.append("statusval" , this.state.statusval);
+	if(this.fileInput.current.files[0]!=undefined)
+	{	formData.append("doc" , this.fileInput.current.files[0]);
+	}
+
+ /* let formData = { heading: this.state.heading, description: this.state.description , project:this.state.project , tags:this.state.tags ,reporter:this.state.reporter , assignee:this.state.assignee ,statusval:this.state.statusval }
+  */
   const response = axios({url:`http://127.0.0.1:8000/bug/${issueId}/` ,method:'PUT', data:formData , withCredentials:true} );
   console.log(response);
 	this.setState({redirect:true});
@@ -141,23 +159,23 @@ render()
       <input type="text" value={this.props.location.state.projectNumber} readonly/>
       </Form.Field>
 
-        <Form.Field required>
+        <Form.Field >
         <label>Heading</label>
-      <input type="text" onChange={event => this.handleHeadingChange(event)} value={this.state.heading} required/>
+      <input type="text"  value={this.state.heading} readonly/>
       </Form.Field>
 <Form.Field>
         <label>Description</label>
-      <input type="text" onChange={event => this.handleDescriptionChange(event)}  value={this.state.description} />
+      <input type="text"   value={this.state.description} readonly/>
       </Form.Field>
 
-        <Form.Field required>
+        <Form.Field >
         <label>Tags</label>
-      <input type="text" onChange={event => this.handleTagsChange(event)} value={this.state.tags} required/>
+      <input type="text" value={this.state.tags} readonly/>
       </Form.Field>
 
-        <Form.Field required>
+        <Form.Field >
         <label>Reporter</label>
-      <input type="text" onChange={event => this.handleReporterChange(event)} value={this.state.reporter} required/>
+      <input type="text" onChange={event => this.handleReporterChange(event)} value={this.state.reporter} />
       </Form.Field>
 
 
@@ -173,6 +191,12 @@ render()
         <label>Status</label>
       <input type="text"  value={this.state.statusval}  readonly />
         </Form.Field>
+
+	<label>Document <Image src={this.state.data.doc} size='small' /></label>
+
+	<label>Replace File</label>
+        <input type="file" ref={this.fileInput}/>
+
     <Button type="submit" >Submit</Button>
 		{this.renderRedirect()}
 

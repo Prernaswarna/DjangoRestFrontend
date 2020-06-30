@@ -26,6 +26,7 @@ class Reportbug extends Component
 
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.fileInput = React.createRef();
         }
 async componentDidMount()
 {
@@ -63,15 +64,58 @@ handleTagsChange = event => {
 }
 
 
+/*handleFileChange = event => {
+ this.setState({
+   fileInput:this.fileInput.current.files[0]
+})
+console.log(this.state.fileInput);
+console.log(event.target.files[0]);
+}*/
 
 
 
-
-handleSubmit = event => {
+async handleSubmit(event) {
   event.preventDefault()
-  let formData = { heading: this.state.heading, description: this.state.description , project:this.state.project , tags:this.state.tags ,reporter:this.state.userId , statusval:this.state.statusval }
-  const response = axios({url:'http://127.0.0.1:8000/bug/' ,method:'POST', data:formData , withCredentials:true} );
+/*const toBase64 = file => new Promise((resolve, reject) => {
+ const reader = new FileReader();
+ reader.readAsDataURL(file);
+ reader.onload = () => resolve(reader.result);
+ reader.onerror = error => reject(error);
+ });*/
+  const formData = new FormData();
+  formData.append("heading" , this.state.heading);
+	formData.append("description" , this.state.description);
+	formData.append("project" , this.state.project);
+	formData.append("tags" , this.state.tags);
+	formData.append("reporter" , this.state.userId);
+	formData.append("statusval" , this.state.statusval);
+	if(this.fileInput.current.files[0]!=undefined)
+        {       formData.append("doc" , this.fileInput.current.files[0]);
+        }
+
+  	
+  /*let formData = { heading: this.state.heading, description: this.state.description , project:this.state.project , tags:this.state.tags ,reporter:this.state.userId , statusval:this.state.statusval , doc: file}
+  */
+const response = axios({url:'http://127.0.0.1:8000/bug/' ,method:'POST', data:formData , withCredentials:true } );
   console.log(response);
+	console.log(this.fileInput.current.files[0]);
+	console.log(formData);
+
+	 const projectId = this.state.project;
+        const respon = await fetch(`http://127.0.0.1:8000/project/${projectId}`);
+        const jso = await respon.json();
+		console.log(jso);
+	for(let user in jso["project_members"])
+	{
+		console.log(jso["project_members"][user]);
+		let id = jso["project_members"][user];
+		const use = await fetch(`http://127.0.0.1:8000/user/${id}`);
+		const userdata = await use.json();
+		let em = userdata["email"]
+		const respon = await axios({url:'http://127.0.0.1:8000/user/sendemail',method:'GET' , params:{email:em , message:'An issue has been added to your project' , subject:'Addition of issue'}, withCredentials:true});
+        console.log(respon);
+	}
+
 	this.setState({redirect:true});
 }
 
@@ -118,6 +162,10 @@ render()
 	<label>Status</label>
       <input type="text"  value={this.state.statusval}  readonly />
 	</Form.Field>
+	
+	<label>File</label>
+	<input type="file" ref={this.fileInput}/>
+	
     <Button type="submit">Submit</Button>
 	{this.renderRedirect()}
   </Form>

@@ -2,7 +2,7 @@ import React , {Component} from 'react';
 import axios from 'axios';
 import ReactDOM from 'react-dom';
 import {Link,Redirect} from 'react-router-dom';
-import {Button , Segment} from 'semantic-ui-react';
+import {Button , Segment, Image} from 'semantic-ui-react';
 
 
 
@@ -71,7 +71,7 @@ render()
 		<Segment vertical>Project Id:{this.state.data.project}</Segment>
 		<Segment vertical>Title : {this.state.data.heading} </Segment>
 		<Segment vertical>Description : {this.state.data.description}</Segment>
-		<Segment vertical>Document : {this.state.data.doc}</Segment>
+		<Segment vertical>Document <Image src={this.state.data.doc} size='small' /></Segment>
 		<Segment vertical>Tags : {this.state.data.tags}</Segment>
 		<Segment vertical>Status : {this.state.data.statusval} </Segment>
 		<Segment vertical>Reporter : {this.state.data.reporter} </Segment>
