@@ -2,7 +2,7 @@ import React , {Component} from 'react';
 import axios from 'axios';
 import ReactDOM from 'react-dom';
 import {Link,Redirect} from 'react-router-dom';
-import {Button , Segment, Image} from 'semantic-ui-react';
+import {Button , Segment, Image , Header} from 'semantic-ui-react';
 
 
 
@@ -41,6 +41,7 @@ async componentDidMount()
         {
                 this.setState({isDisplayed:true});
         }
+	console.log(this.props.location.state.projectNames);
 
 }
 
@@ -67,22 +68,42 @@ render()
 	 const style= this.state.isDisplayed ? {display:''} : {display:'none'}
         return (
      <div>
-		<Segment vertical>Issue Id :{this.state.data.id}</Segment> 
-		<Segment vertical>Project Id:{this.state.data.project}</Segment>
-		<Segment vertical>Title : {this.state.data.heading} </Segment>
-		<Segment vertical>Description : {this.state.data.description}</Segment>
-		<Segment vertical>Document <Image src={this.state.data.doc} size='small' /></Segment>
-		<Segment vertical>Tags : {this.state.data.tags}</Segment>
-		<Segment vertical>Status : {this.state.data.statusval} </Segment>
-		<Segment vertical>Reporter : {this.state.data.reporter} </Segment>
-		<Segment vertical>Assignee : {this.state.data.assignee} </Segment>
-                        
-        <Button style={style} as={Link} to={{pathname:"/editissue",state:{issueId:this.state.data.id, projectNumber:this.state.data.project} }} >Edit Issue</Button>
-<Button  as={Link} to={{pathname:"/comments",state:{issueId:this.state.data.id, userId:this.state.userId} }} >Comment</Button>
+<Header as='h2' textAlign='center'>
 
-		<Button style={style} onClick={event=>this.deleteIssue(event)} >Delete Issue</Button>
+    <Header.Content>
+                Issue {this.state.data.heading}
+      <Header.Subheader>View details of the issue</Header.Subheader>
+    </Header.Content>
+  </Header>
+		
+		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Issue Id :</span> {this.state.data.id}</Segment></div>
+
+		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Project Id :</span> {this.state.data.project}</Segment></div>
+
+		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Project Name :</span> {this.props.location.state.projectNames}</Segment></div>
+
+	<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Title :</span> {this.state.data.heading}</Segment></div>
+
+	<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Description :</span> {this.state.data.description}</Segment></div>
+
+	<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Tags :</span> {this.state.data.tags}</Segment></div>
+
+		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Status :</span> {this.state.data.statusval}</Segment></div>
+
+<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Reporter :</span> {this.state.data.reporter}</Segment></div>
+
+		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Assignee :</span> {this.state.data.assignee}</Segment></div>
+
+		
+		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold' , fontSize:'17px' , fontFamily:'Georgia serif'}}>Document :</span><Image src={this.state.data.doc} size='small' /></Segment></div>
+	<div style={{padding:'5% 0px 0px 0px', textAlign:'center'}}>
+	                      
+        <Button color='green' style={style} as={Link} to={{pathname:"/editissue",state:{issueId:this.state.data.id, projectNumber:this.state.data.project} }} >Edit Issue</Button>
+<Button  color='blue' as={Link} to={{pathname:"/comments",state:{issueId:this.state.data.id, userId:this.state.userId} }} >Comment</Button>
+
+		<Button color='red' style={style} onClick={event=>this.deleteIssue(event)} >Delete Issue</Button>
                 {this.renderRedirect()}
-
+	</div>
 
 </div>
     );

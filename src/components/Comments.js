@@ -69,8 +69,10 @@ check = () =>{
 	render()
 	{
 		return <div>
+		<div style={{padding:'2% 10% 2% 10%'}}>
+
 		<Comments websocket={this.state.ws} issueId={this.props.location.state.issueId} />
-		<Header as='h3' >New Comments</Header>
+		<div style={{padding:'2% 10% 2% 10%'}}><Header as='h3' >New Comments</Header></div>
 					
 		{this.state.data.map(el => (
 		<Message size='tiny'>
@@ -83,7 +85,7 @@ check = () =>{
 		</Message>
 		))}
 		
-		
+		</div>
 		</div>
 		
 	}
@@ -180,8 +182,13 @@ render()
 	const style= this.state.isLoggedIn ? {display:''} : {display:'none'}
         return(
         <div style={style}>
-	
-	
+	<div style={{padding:'2% 10% 2% 10%'}}>
+<Header as="h2">
+<Header.Content>
+      Comments
+      <Header.Subheader>View all comments for issue {this.state.bug} </Header.Subheader>
+    </Header.Content>
+  </Header>	
         <Form onSubmit={event => this.handleSubmit(event)}>
         <Form.Field>
       <label>Issue Id</label>
@@ -199,7 +206,7 @@ render()
 	</Form.Field>
 
 
-	<Button type="submit" >Submit</Button>
+	<Button color='green' type="submit" >Submit</Button>
   </Form>
 	{this.state.commentlist.map(el=>(
                 <Message size='tiny'>
@@ -211,7 +218,7 @@ render()
                 </p>
                 </Message>
         ))}
-
+</div>
 </div>
 	);
 }

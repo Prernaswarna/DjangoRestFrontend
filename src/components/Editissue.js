@@ -1,7 +1,7 @@
 import React ,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import {Segment , Image , Button ,Form,Dropdown} from 'semantic-ui-react';
+import {Segment,Image ,Header,Button ,Form,Dropdown} from 'semantic-ui-react';
 import {Redirect} from 'react-router-dom';
 
 axios.defaults.xsrfCookieName = 'frontend_csrftoken'
@@ -152,8 +152,16 @@ renderRedirect= () =>{
 render()
 {
         return(
-        <div>
-        <Form onSubmit={event => this.handleSubmit(event)}>
+        <div style={{padding:'3% 10% 0px 10%'}}>
+        <Header as='h2' textAlign='center'>
+	    <Header.Content>
+                Issue : {this.state.heading}
+      <Header.Subheader>Edit details</Header.Subheader>
+    </Header.Content>
+  </Header>
+
+		
+	<Form onSubmit={event => this.handleSubmit(event)}>
         <Form.Field>
       <label>Project-id</label>
       <input type="text" value={this.props.location.state.projectNumber} readonly/>
@@ -189,15 +197,16 @@ render()
 
         <Form.Field>
         <label>Status</label>
-      <input type="text"  value={this.state.statusval}  readonly />
+      <input type="text"  onChange={event => this.handleStatusvalChange(event)} value={this.state.statusval}   />
         </Form.Field>
 
-	<label>Document <Image src={this.state.data.doc} size='small' /></label>
+	<label style={{fontWeight:'bold' ,fontSize:'13px'}}>Document <Image src={this.state.data.doc} size='small' /></label>
 
-	<label>Replace File</label>
+	<label style={{fontWeight:'bold' ,fontSize:'13px'}}>Replace File</label>
         <input type="file" ref={this.fileInput}/>
 
-    <Button type="submit" >Submit</Button>
+    <div style={{padding:'5% 0px 0px 0px', textAlign:'center'}}>
+<Button color='green' type="submit" >Submit</Button></div>
 		{this.renderRedirect()}
 
   </Form>

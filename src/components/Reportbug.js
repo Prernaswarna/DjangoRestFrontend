@@ -1,7 +1,7 @@
 import React ,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import {Form , Button} from 'semantic-ui-react';
+import {Form ,Header, Button} from 'semantic-ui-react';
 import {Redirect} from 'react-router-dom';
 
 
@@ -132,6 +132,14 @@ render()
 {
 	return(
 	<div>
+	<div style={{padding:'3% 10% 0px 10%'}}>
+        <Header as='h2' textAlign='center'>
+            <Header.Content>
+                Add Issue 
+      <Header.Subheader>Add details of new issue</Header.Subheader>
+    </Header.Content>
+  </Header>
+
 	<Form onSubmit={event => this.handleSubmit(event)}>
 	<Form.Field>
       <label>Project-id</label>
@@ -163,13 +171,13 @@ render()
       <input type="text"  value={this.state.statusval}  readonly />
 	</Form.Field>
 	
-	<label>File</label>
+	<label style={{fontWeight:'bold' ,fontSize:'13px'}}>Document</label>
 	<input type="file" ref={this.fileInput}/>
-	
-    <Button type="submit">Submit</Button>
+	<div style={{padding:'5% 0px 0px 0px', textAlign:'center'}}>	
+    <Button color='green' type="submit">Submit Form</Button></div>
 	{this.renderRedirect()}
   </Form>
-   
+</div>   
 </div>
 );
 }

@@ -2,7 +2,7 @@ import React , {Component} from 'react';
 import axios from 'axios';
 import ReactDOM from 'react-dom';
 import {Link} from 'react-router-dom';
-import {Button, Grid} from 'semantic-ui-react';
+import {Header ,Button,Segment , Label, Grid} from 'semantic-ui-react';
 
 
 
@@ -15,6 +15,7 @@ class Viewissues extends Component
 			arr:[],
 			typeofuser:false,
 			userId:0,
+			
 		};
         }
 async componentDidMount()
@@ -50,43 +51,42 @@ render()
 	const s1 = this.state.arr && this.state.arr.length>0 ? {display:''} : {display:'none'}
 	const projectId = this.props.location.state.projectNumber;
         return (
-      <div>
-        <Grid columns={3} style={s1} divided>
-	<Grid.Row>
-	<Grid.Column>
-		Issue Id
-	</Grid.Column>
-	<Grid.Column>
-		Project Id
-	</Grid.Column>
-	<Grid.Column>
-		Issue Description
-	</Grid.Column>
-	</Grid.Row>
+<div>
+	<div style={{padding:'2% 10% 2% 10%' , textAlign:'center'}}><Header as='h2'>
+     <Header.Content>
+      Issue List
+      <Header.Subheader>View all issues for project {this.props.location.state.projectname} </Header.Subheader>
+    </Header.Content>
+  </Header></div>
+
+      <div style={{padding:'2% 10% 2% 10%'}}>
+        <Grid columns={1} style={s1} >
           {this.state.arr.map(el => (
             <Grid.Row>
 	    <Grid.Column>
-	    {el.id}
-	     </Grid.Column>
-	     <Grid.Column>
-		    {el.project}
-	     </Grid.Column>
-	     <Grid.Column>
+		 <Segment raised>
+                        <Label as='a' color='pink' ribbon>
+                        Issue Id : {el.id}
+                        </Label>
+		    
 		  <Link to={{
                       pathname : "/individualissue",
-                      state :{issueId:  el.id ,projectNumber:this.props.location.state.projectNumber}
+                      state :{issueId:  el.id ,projectNumber:this.props.location.state.projectNumber , projectNames:this.props.location.state.projectname}
                 }} >
 
-		 {el.heading}
+		  {el.heading} : 
 		 </Link>
+		  <span style={{backgroundColor:'#ff69b4' ,color:'white', padding:'2px', margin:'2%' , border:'2px solid #ff69b4' , borderRadius:'4px'}}>{el.statusval}</span>
+		 </Segment>
 	     </Grid.Column>
 	
         </Grid.Row>
           ))}
         </Grid>
-        <Button as={Link} to={{pathname:"/reportbug" , state:{projectNumber:projectId} }} >Add Issue</Button>
+        <div style={{textAlign:'center', padding:'5%'}}><Button color='black' as={Link} to={{pathname:"/reportbug" , state:{projectNumber:projectId} }} >Add Issue</Button></div>
 
       </div>
+</div>
     );
 
 }

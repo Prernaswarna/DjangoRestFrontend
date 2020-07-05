@@ -2,7 +2,7 @@ import React , {Component} from 'react';
 import axios from 'axios';
 import ReactDOM from 'react-dom';
 import {Link} from 'react-router-dom';
-import {Grid , Button} from 'semantic-ui-react';
+import {Grid , Button,Sidebar , Menu , Segment , Label , Header} from 'semantic-ui-react';
 import CKEditor from 'ckeditor4-react';
 
 class Projects extends Component
@@ -47,46 +47,48 @@ render()
 {
 	const style= this.state.isLoggedIn ? {display:''} : {display:'none'}		
         const s1 = this.state.data && this.state.data.length>0 ? {display:''} : {display:'none'}
+	
 	return (
 	
       <div style={style}>
-        <Grid columns ={3} style={s1} divided>
-	<Grid.Row>
-        <Grid.Column>
-                Project Id
-        </Grid.Column>
-        <Grid.Column>
-                Project Name
-        </Grid.Column>
-        <Grid.Column>
-                Wiki
-        </Grid.Column>
-        </Grid.Row>
+	
+<div style={{padding:'2% 10% 2% 10%'}}><Header as='h2'>
+     <Header.Content>
+      Project List
+      <Header.Subheader>View all the projects</Header.Subheader>
+    </Header.Content>
+  </Header></div>
+	<div style={{padding:'2% 10% 2% 10%'}}>
+        <Grid columns ={1} style={s1} >
 	
           {this.state.data.map(el => (
              <Grid.Row>
 	        <Grid.Column>
-			{el.id}
-		</Grid.Column>
-		<Grid.Column>
+		  <Segment raised>
+        		<Label as='a' color='pink' ribbon>
+			Project Number:{el.id}
+		  	</Label>
+		 
+		<span>
               <Link to={{
 		      pathname : "/individual",
 		      state :{projectNumber:  el.id }
 		}} >
 		  {el.project_name} 
 		</Link>
-		</Grid.Column>
-		<Grid.Column>
+		 </span>
 		  <CKEditor 
 		 data= {el.wiki} type="inline" readOnly={true}
 		  />
+		 </Segment>
 		</Grid.Column>
         	
 		 
 		 </Grid.Row>
           ))}
         </Grid>
-	<Button as={Link} to={{pathname:"/newproject" }} >Add Project</Button>
+	</div>
+	<div style={{textAlign:'center', padding:'5%'}}><Button color='black' as={Link} to={{pathname:"/newproject" }} >Add Project</Button></div>
 
       </div>
     );

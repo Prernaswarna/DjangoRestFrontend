@@ -29,12 +29,14 @@ class Logout extends Component
 {
         return (
      <div>
-                <Message>
+                <div style={{padding:'2% 10% 2% 10%'}}>
+		<Message>
                 <Message.Header>Logged out</Message.Header>
                 <p>You have successfully loggedout</p>
                 </Message>
-        <Button as={Link} to={{pathname:"/" }} >Login</Button>
+        <div style={{textAlign:'center', padding:'1%'}}><Button color='green' as={Link} to={{pathname:"/" }} >Login</Button></div>
          </div>
+</div>
     );
 
 }

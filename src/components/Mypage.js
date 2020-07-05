@@ -2,7 +2,7 @@ import React , {Component} from 'react';
 import axios from 'axios';
 import ReactDOM from 'react-dom';
 import {Link} from 'react-router-dom';
-import {Button, Grid , Header} from 'semantic-ui-react';
+import {Button,Divider , Grid , Header , Segment , Label} from 'semantic-ui-react';
 
 
 
@@ -11,11 +11,18 @@ class Mypage extends Component
         constructor(props)
         {
                 super(props);
-                this.state = { projects :[], assigned:[] ,reported:[], projectlist:[] , issueslist:[] , isDisplayed:false};
+                this.state = { typeofuser:false , userId:0 ,projects :[], assigned:[] ,reported:[], projectlist:[] , issueslist:[] , isDisplayed:false};
         }
 async componentDidMount()
 {
-	console.log(this.props.location.state.typeofuser);
+	//console.log(this.props.location.state.typeofuser);
+	const getuser = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
+
+        const jsonuser =  await getuser.data;
+        console.log(getuser.data);
+        this.setState({typeofuser:jsonuser.typeofuser})
+        this.setState({userId:jsonuser.userId});
+
         const response = await axios({url:'http://127.0.0.1:8000/project/',method:'GET' , withCredentials:true});
         const json = await response.data;
 	const res = await axios({url:'http://127.0.0.1:8000/bug/',method:'GET' , withCredentials:true});
@@ -29,7 +36,7 @@ async componentDidMount()
 		{
 			
 		
-                if(this.state.projectlist[proj]["project_members"][user]  == this.props.location.state.userId)
+                if(this.state.projectlist[proj]["project_members"][user]  == this.state.userId)
                 {
                         Newarr.push(this.state.projectlist[proj])
 
@@ -46,7 +53,7 @@ async componentDidMount()
         {
                
 
-                if(this.state.issueslist[bug]["reporter"]  == this.props.location.state.userId)
+                if(this.state.issueslist[bug]["reporter"]  == this.state.userId)
                 {
                         newarr.push(this.state.issueslist[bug])
 
@@ -61,7 +68,7 @@ async componentDidMount()
         {
 
 
-                if(this.state.issueslist[bug]["assignee"]  == this.props.location.state.userId)
+                if(this.state.issueslist[bug]["assignee"]  == this.state.userId)
                 {
                         arr.push(this.state.issueslist[bug])
 
@@ -70,7 +77,7 @@ async componentDidMount()
         }
          await this.setState({assigned:arr});
 
-	if(this.props.location.state.typeofuser==true)
+	if(this.state.typeofuser==true)
 		await this.setState({isDisplayed:true})
 	/*console.log(this.state.issueslist);
 	console.log(this.state.projectlist);
@@ -90,104 +97,84 @@ render()
 	const s2 = this.state.assigned && this.state.assigned.length>0 ? {display:''} : {display:'none'}
 	const s3 = this.state.reported && this.state.reported.length>0 ? {display:''} : {display:'none'}
 	
-        return (<div><Header as='h3' style={s1}>Projects</Header>
-        <Grid style={s1} columns={2} divided>
-	<Grid.Row>
-	<Grid.Column>
-		Project Id
-	</Grid.Column>
-	<Grid.Column>
-		Project Name
-	</Grid.Column>
-	</Grid.Row>
-	
+        return (<div>
+		<div style={{padding:'2% 10% 2% 10%'}}><Header as='h2'>
+     <Header.Content>
+      My Account
+      <Header.Subheader>Important projects and issues</Header.Subheader>
+    </Header.Content>
+  </Header></div>
+		<Divider />
+		<div style={{padding:'2% 10% 2% 10%'}}>
+		<Header as='h3' style={s1}>My Projects</Header>
+        <Grid style={s1} columns={1}>
+
           {this.state.projects.map(el => (
             <Grid.Row>
 	    <Grid.Column>
-              {el.id} 
-	    </Grid.Column>
-	    <Grid.Column>
-		 {el.project_name} 
+              <Segment raised>
+                        <Label as='a' color='pink' ribbon>
+                        Project Number:{el.id}
+                        </Label>
+	   	{el.project_name}
+		  
+		 </Segment>
 	    </Grid.Column>
             </Grid.Row>
        
           ))}
         </Grid>
-	
-	
-	
+</div>	
+<Divider />	
+	<div style={{padding:'2% 10% 2% 10%'}}>
 	<Header as='h3' style={s3}>Reported Issues</Header>
-	<Grid style={s3} columns={3} divided>
-        <Grid.Row>
-        <Grid.Column>
-                Issue Id
-        </Grid.Column>
-        <Grid.Column>
-                Issue Title
-        </Grid.Column>
-	<Grid.Column>
-		Issue Description
-	</Grid.Column>
-        </Grid.Row>
-
-  
+	<Grid style={s3} columns={1} >
+        
           {this.state.reported.map(el => (
             <Grid.Row>
 	<Grid.Column>
-              {el.id}
-	</Grid.Column>
-	<Grid.Column>
-	 {el.heading} 
-	</Grid.Column>
-	<Grid.Column>
-	{el.description}
-	</Grid.Column>
+		  <Segment raised>
+                        <Label as='a' color='yellow' ribbon>
+                        Issue Id : {el.id}
+                        </Label>
+
+	 {el.heading} : <span style={{color:'#808080'}}>{el.description}</span>
+	</Segment>
+		  </Grid.Column>
 
 	</Grid.Row>
           ))}
         </Grid>
-        
+       </div> 
 
 
-	
+<Divider />
+	<div style={{padding:'2% 10% 2% 10%'}}>
 	<Header style={s2} as='h3'>Assigned Issues</Header>
-	<Grid style={s2} columns={3} divided>
-        <Grid.Row>
-        <Grid.Column>
-                Issue Id
-        </Grid.Column>
-        <Grid.Column>
-                Issue Title
-        </Grid.Column>
-	<Grid.Column>
-		Issue Description
-	</Grid.Column>
-        </Grid.Row>
-
+	<Grid style={s2} columns={1} >
         
           {this.state.assigned.map(el => (
             <Grid.Row>
 	<Grid.Column>
-              {el.id}
-	</Grid.Column>
-	<Grid.Column>
-	{el.heading} 
-	</Grid.Column>
-	<Grid.Column>
-	{el.description}
-	</Grid.Column>
+              <Segment raised>
+                        <Label as='a' color='pink' ribbon>
+                        Issue Id : {el.id}
+                        </Label>
+	{el.heading} : <span style={{color:'#808080'}}>{el.description}</span>
+	</Segment>
+		 </Grid.Column>
 
         </Grid.Row>
           ))}
         </Grid>
-        
+       </div> 
 	
+	<Divider />
+
+	<div style={{textAlign:'center', padding:'5%'}}><Button color='blue' as={Link} to={{pathname:"/projects" }} >View All Projects</Button>
 
 
-	<Button as={Link} to={{pathname:"/projects" , state:{userId:this.props.location.state.userId , typeofuser:this.props.location.state.typeofuser} }} >View All Projects</Button>
-
-
-	<Button style={style} as={Link} to={{pathname:"/about" , state:{userId:this.props.location.state.userId , typeofuser:this.props.location.state.typeofuser} }} >View All Users</Button>
+	<Button color='green' style={style} as={Link} to={{pathname:"/about"  }} >View All Users</Button></div>
 	
 	</div>
 	

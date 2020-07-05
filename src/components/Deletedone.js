@@ -18,12 +18,14 @@ render()
 {
         return (
      <div>
-                <Message>
+                <div style={{padding:'2% 10% 2% 10%'}}>
+		<Message>
                 <Message.Header>Deletion Successful</Message.Header>
                 <p>Your deletion was successful.</p>
                 </Message>
-        <Button as={Link} to={{pathname:"/projects" }} >Continue</Button>
+        <div style={{textAlign:'center', padding:'1%'}}><Button color='green' as={Link} to={{pathname:"/projects" }} >Continue</Button></div>
          </div>
+	</div>
     );
 
 }

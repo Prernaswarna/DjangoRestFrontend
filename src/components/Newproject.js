@@ -1,7 +1,7 @@
 import React ,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import {Button, Dropdown, Form } from 'semantic-ui-react';
+import {Button, Dropdown, Form , Header} from 'semantic-ui-react';
 import CKEditor from 'ckeditor4-react';
 import PropTypes from 'prop-types';
 import {Redirect} from 'react-router-dom';
@@ -126,6 +126,14 @@ render()
 	const styl= this.state.isLoggedIn ? {display:''} : {display:'none'}
         return(
         <div style={styl}>
+		<div style={{padding:'3% 10% 0px 10%'}}>
+        <Header as='h2' textAlign='center'>
+            <Header.Content>
+                Add a New Project
+      <Header.Subheader>Fill details about the project</Header.Subheader>
+    </Header.Content>
+  </Header>
+
         <Form onSubmit={event => this.handleSubmit(event)}>
 	<Form.Field required>
       <label>Project-name</label>
@@ -146,10 +154,11 @@ render()
 />
   </Form.Field>
 
-
-<Button type="submit" >Submit</Button>		
+<div style={{padding:'5% 0px 0px 0px', textAlign:'center'}}>
+<Button color='green' type="submit" >Submit Form</Button></div>		
 		{this.renderRedirect()}
   </Form>
+		</div>
    </div>
 	);
 }
