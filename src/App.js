@@ -23,7 +23,7 @@ import Done from './components/Done';
 import Main from './components/Comments';
 import Logout from './components/Logout';
 import Deletedone from './components/Deletedone';
-
+import Adminchange from './components/Adminchange';
 
 class App extends Component {
   render() {
@@ -49,6 +49,7 @@ class App extends Component {
 	    <Route path="/comments" component={Main} />
 	    <Route path="/logout" component={Logout} />
 	    <Route path="/deletedone" component={Deletedone} />
+	    <Route path="/adminchange" component={Adminchange} />
             <Route component={Error}/>
            </Switch>
         </div> 

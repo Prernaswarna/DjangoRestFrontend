@@ -170,8 +170,8 @@ render()
 </div>
 );
 }
-
 }
+
 
 
 class EditorPreview extends Component {

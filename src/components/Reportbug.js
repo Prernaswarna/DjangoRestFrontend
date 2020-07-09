@@ -15,9 +15,9 @@ class Reportbug extends Component
                 super(props);
                 this.state = { data :[],
 		project : this.props.location.state.projectNumber,
-		heading : "Not provided",
+		heading : "",
 		description:"Not provided",
-		tags:"Not provided",
+		tags:"",
 		statusval : "Unassigned",
 		submittedData: [],
 		redirect:false,

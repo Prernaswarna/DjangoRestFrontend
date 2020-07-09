@@ -2,7 +2,7 @@ import React , {Component} from 'react';
 import axios from 'axios';
 import ReactDOM from 'react-dom';
 import {Label,Table ,Grid , Button , Segment , Header} from 'semantic-ui-react'; 
-import {Link} from 'react-router-dom';
+import {Redirect ,Link} from 'react-router-dom';
 
 class About extends Component
 {
@@ -37,6 +37,41 @@ async componentDidMount()
 	console.log(json);
 }
 
+changeType = async(id,event) => {
+  event.preventDefault()
+	console.log(id);
+   const singleuser = await fetch(`http://127.0.0.1:8000/user/${id}`);
+   const userresponse = await singleuser.json();
+	 console.log(userresponse);
+          let formData = { username: userresponse.username, email: userresponse.email , enroll:userresponse.enroll , typeofuser:true }
+  const response = axios({url:`http://127.0.0.1:8000/user/${userresponse.id}/` ,method:'PUT', data:formData , withCredentials:true} );
+  console.log(response);
+  this.setState({redirect:true});
+
+}
+
+adminType = async(id,event) => {
+  event.preventDefault()
+        console.log(id);
+   const singleadmin = await fetch(`http://127.0.0.1:8000/user/${id}`);
+   const adminresponse = await singleadmin.json();
+         console.log(adminresponse);
+          let formData = { username: adminresponse.username, email: adminresponse.email , enroll:adminresponse.enroll , typeofuser:false }
+  const response = axios({url:`http://127.0.0.1:8000/user/${adminresponse.id}/` ,method:'PUT', data:formData , withCredentials:true} );
+  console.log(response);
+  this.setState({redirect:true});
+
+}
+
+
+renderRedirect= () =>{
+        if(this.state.redirect==true)
+        {
+                return <Redirect to={{pathname:'/adminchange'  }}/>
+        }
+}
+
+
 render()
 {
 	const styl= this.state.isLoggedIn ? {display:''} : {display:'none'}
@@ -69,6 +104,15 @@ render()
 		  <Grid.Column>
 		  {el.enroll}
 		  </Grid.Column>
+	
+		 <Grid.Column>
+		  {!el.typeofuser &&
+			  <Button color='green' onClick={(e)=>this.changeType(el.id,e)}>Add Admin</Button>}
+		  {el.typeofuser &&
+                          <Button color='red' onClick={(e)=>this.adminType(el.id,e)}>Remove Admin</Button>}
+
+		 {this.renderRedirect()}
+		 </Grid.Column>
            </Grid.Row>    
           ))}
         </Grid>
@@ -77,7 +121,7 @@ render()
 
 
 
-	<Button color='green' as={Link} to={{pathname:"/mypage" , state:{userId:this.state.userId , typeofuser:this.state.typeofuser} }} >My Page</Button>
+	<Button color='black' as={Link} to={{pathname:"/mypage" , state:{userId:this.state.userId , typeofuser:this.state.typeofuser} }} >My Page</Button>
 </div>
 		</div>
       </div>
