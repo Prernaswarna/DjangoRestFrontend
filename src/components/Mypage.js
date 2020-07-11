@@ -86,8 +86,8 @@ async componentDidMount()
 	console.log(this.state.reported);
 	console.log(this.props.location.state.userId);
 	console.log(this.props.location.state.typeofuser);*/
-	const respon = await axios({url:'http://127.0.0.1:8000/user/sendemail',method:'GET' , params:{email:'prernaswarna@gmail.com'}, withCredentials:true});
-	console.log(respon);
+	/*const respon = await axios({url:'http://127.0.0.1:8000/user/sendemail',method:'GET' , params:{email:'prernaswarna@gmail.com'}, withCredentials:true});
+	console.log(respon);*/
 }
 
 render()

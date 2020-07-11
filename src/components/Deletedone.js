@@ -23,7 +23,7 @@ render()
                 <Message.Header>Deletion Successful</Message.Header>
                 <p>Your deletion was successful.</p>
                 </Message>
-        <div style={{textAlign:'center', padding:'1%'}}><Button color='green' as={Link} to={{pathname:"/projects" }} >Continue</Button></div>
+        <div style={{textAlign:'center', padding:'1%'}}><Button color='green' as={Link} to={{pathname:"/mypage" }} >Continue</Button></div>
          </div>
 	</div>
     );

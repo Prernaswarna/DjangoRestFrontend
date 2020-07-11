@@ -11,7 +11,7 @@ class Individualissue extends Component
         constructor(props)
         {
                 super(props);
-                this.state = { data :[],projectinfo:[],isDisplayed:false,typeofuser:false,userId:0};
+                this.state = { data :[],projectinfo:[],isDisplayed:false,typeofuser:false,userId:0 , reportername:"" , assigneename:""};
         	this.deleteIssue = this.deleteIssue.bind(this);
 	}
 async componentDidMount()
@@ -24,6 +24,20 @@ async componentDidMount()
 	const js = await res.json();
         this.setState({data:json});
 	this.setState({projectinfo:js});
+	
+	const reporterinfo = await fetch(`http://127.0.0.1:8000/user/${this.state.data.reporter}`);
+	const reporterjson = await reporterinfo.json();
+	
+	this.setState({reportername:reporterjson.username});
+	
+	if(this.state.data.assignee!=null)
+	{
+		const assigneeinfo = await fetch(`http://127.0.0.1:8000/user/${this.state.data.assignee}`);
+        const assigneejson = await assigneeinfo.json();
+
+        this.setState({assigneename:assigneejson.username});
+
+	}
 	const resp = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
 
         const j = await resp.data;
@@ -90,9 +104,9 @@ render()
 
 		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Status :</span> {this.state.data.statusval}</Segment></div>
 
-<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Reporter :</span> {this.state.data.reporter}</Segment></div>
+<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Reporter :</span> {this.state.data.reporter}  {this.state.reportername}</Segment></div>
 
-		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Assignee :</span> {this.state.data.assignee}</Segment></div>
+		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Assignee :</span> {this.state.data.assignee}  {this.state.assigneename}</Segment></div>
 
 		
 		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold' , fontSize:'17px' , fontFamily:'Georgia serif'}}>Document :</span><Image src={this.state.data.doc} size='small' /></Segment></div>
