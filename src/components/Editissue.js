@@ -113,7 +113,7 @@ handleStatusvalChange = event => {
 }
 
 
-handleSubmit = event => {
+async handleSubmit = (event) => {
   event.preventDefault()
   const issueId = this.props.location.state.issueId;
   const formData = new FormData();
@@ -134,8 +134,9 @@ handleSubmit = event => {
 
  /* let formData = { heading: this.state.heading, description: this.state.description , project:this.state.project , tags:this.state.tags ,reporter:this.state.reporter , assignee:this.state.assignee ,statusval:this.state.statusval }
   */
-  const response = axios({url:`http://127.0.0.1:8000/bug/${issueId}/` ,method:'PUT', data:formData , withCredentials:true} );
+  const response =await  axios({url:`http://127.0.0.1:8000/bug/${issueId}/` ,method:'PUT', data:formData , withCredentials:true} );
   console.log(response);
+	 console.log(response.json());
 	this.setState({redirect:true});
 }
 
