@@ -17,7 +17,7 @@ class Newproject extends Component
                 super(props);
                 this.state = {
 		userlist : [],
-                project_name : "Not provided",
+                project_name : "",
                 wiki : "<p>Not provided</p>",
                 project_members:[],
                 submittedData: [],
@@ -25,6 +25,7 @@ class Newproject extends Component
 		userId:0,
 		typeofuser:false,
 		isLoggedIn:false,
+		failed:false,
                 };
                 this.handleSubmit = this.handleSubmit.bind(this);
 		this.onEditorChange = this.onEditorChange.bind(this);
@@ -32,7 +33,7 @@ class Newproject extends Component
         }
 async componentDidMount()
 {
-	 const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
+	 const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
 
         const js = await res.data;
         this.setState({typeofuser:js.typeofuser})
@@ -46,7 +47,7 @@ async componentDidMount()
 		this.setState({isLoggedIn:true});
 	}
 
-	const response = await axios({ url : 'http://127.0.0.1:8000/user/' , method:'get' , withCredentials:true})
+	const response = await axios({ url : 'http://127.0.0.1:8000/user/' , method:'get' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
 	let arr = [];
 	const ul = response.data;
 	for(let user in ul)
@@ -98,9 +99,7 @@ handleMemberChange=(event , data) => {
  handleSubmit = event => {
   event.preventDefault()
   let formData = { project_name: this.state.project_name, wiki: this.state.wiki , project_members:this.state.project_members }
-  const response = axios({url:'http://127.0.0.1:8000/project/' ,method:'POST', data:formData , withCredentials:true} );
-  console.log(response);
-  this.setState({redirect:true})
+  axios({url:'http://127.0.0.1:8000/project/' ,method:'POST', data:formData , withCredentials:true} ).then(response=>{this.setState({redirect:true})}).catch(error=>{this.setState({failed:true})})
 /*if(response.status==200)
 {
 	this.setState({redirect:true})
@@ -118,6 +117,11 @@ renderRedirect= () =>{
 	{
 		return <Redirect to={{pathname:'/done'  }}/>
 	}
+	else if(this.state.failed==true)
+        {
+                return <Redirect to={{pathname:'/fail'  }}/>
+        }
+
 }
 
 
@@ -170,7 +174,7 @@ class EditorPreview extends Component {
     render() {
         return (
             <div className="editor-preview">
-                <h2>Rendered content</h2>
+                <br /><h4>Rendered content</h4>
                 <div dangerouslySetInnerHTML={ { __html: this.props.data } }></div>
             </div>
         );

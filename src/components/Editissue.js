@@ -24,7 +24,8 @@ class Editissue extends Component
 		redirect:false,
 		userId:0,
 		typeofuser:false,
-		userlist:[]
+		userlist:[],
+		failed:false
                 };
                 this.handleSubmit = this.handleSubmit.bind(this);
         	this.fileInput = React.createRef();
@@ -34,8 +35,8 @@ class Editissue extends Component
 	async componentDidMount()
 	{	
 	const issueId = this.props.location.state.issueId;
-        const response = await fetch(`http://127.0.0.1:8000/bug/${issueId}`);
-        const json = await response.json();
+        const response = await axios({url:`http://127.0.0.1:8000/bug/${issueId}`,method:'GET' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
+        const json = await response.data;
         this.setState({data:json});
         console.log(json);
 	this.setState({heading:this.state.data.heading})
@@ -44,13 +45,13 @@ class Editissue extends Component
 	this.setState({reporter:this.state.data.reporter})
 	this.setState({statusval:this.state.data.statusval})
 	this.setState({assignee:this.state.data.assignee})
-	const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
+	const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true}).then(response =>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
 
         const js = await res.data;
         this.setState({typeofuser:js.typeofuser})
         this.setState({userId:js.userId});
 
-	const re = await axios({ url : 'http://127.0.0.1:8000/user/' , method:'get' , withCredentials:true})
+	const re = await axios({ url : 'http://127.0.0.1:8000/user/' , method:'get' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
 
         let arr = [];
         const ul = re.data;
@@ -113,7 +114,7 @@ handleStatusvalChange = event => {
 }
 
 
-async handleSubmit = (event) => {
+ handleSubmit = async(event) => {
   event.preventDefault()
   const issueId = this.props.location.state.issueId;
   const formData = new FormData();
@@ -134,10 +135,9 @@ async handleSubmit = (event) => {
 
  /* let formData = { heading: this.state.heading, description: this.state.description , project:this.state.project , tags:this.state.tags ,reporter:this.state.reporter , assignee:this.state.assignee ,statusval:this.state.statusval }
   */
-  const response =await  axios({url:`http://127.0.0.1:8000/bug/${issueId}/` ,method:'PUT', data:formData , withCredentials:true} );
-  console.log(response);
-	 console.log(response.json());
-	this.setState({redirect:true});
+  await  axios({url:`http://127.0.0.1:8000/bug/${issueId}/` ,method:'PUT', data:formData , withCredentials:true} ).then(response=>{this.setState({redirect:true}); }).catch(error=>{this.setState({failed:true}); })
+ 
+
 }
 
 renderRedirect= () =>{
@@ -145,6 +145,11 @@ renderRedirect= () =>{
         {
                 return <Redirect to={{pathname:'/done'  }}/>
         }
+	else if(this.state.failed==true)
+        {
+                return <Redirect to={{pathname:'/fail'  }}/>
+        }
+
 }
 
 

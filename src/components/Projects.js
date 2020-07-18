@@ -16,7 +16,7 @@ class Projects extends Component
         }
 async componentDidMount()
 {
-      	 const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
+      	 const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
 
         const js =  await res.data;
         console.log(res.data);
@@ -33,8 +33,8 @@ async componentDidMount()
 	}
  
 	console.log(this.state.isLoggedIn);
-	const response = await fetch('http://127.0.0.1:8000/project/');
-        const json = await response.json();
+	const response = await axios({url:'http://127.0.0.1:8000/project/',method:'GET' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
+        const json = response.data;
         this.setState({data:json})
 	
 	/*console.log(this.state.isDisplayed);

@@ -22,7 +22,8 @@ class Reportbug extends Component
 		submittedData: [],
 		redirect:false,
 		typeofuser:false,
-		userId:0
+		userId:0,
+		failed:false
 
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,12 +32,11 @@ class Reportbug extends Component
 async componentDidMount()
 {
 
-        const response = await fetch('http://127.0.0.1:8000/user/');
-        const json = await response.json();
+        const response = await axios({url:'http://127.0.0.1:8000/user/',method:'GET',withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
+        const json = await response.data;
         this.setState({data:json});
         console.log(json);
-	const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
-
+	const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail" })
         const js = await res.data;
         this.setState({typeofuser:js.typeofuser})
         this.setState({userId:js.userId});
@@ -96,27 +96,25 @@ async handleSubmit(event) {
   	
   /*let formData = { heading: this.state.heading, description: this.state.description , project:this.state.project , tags:this.state.tags ,reporter:this.state.userId , statusval:this.state.statusval , doc: file}
   */
-const response = axios({url:'http://127.0.0.1:8000/bug/' ,method:'POST', data:formData , withCredentials:true } );
-  console.log(response);
-	console.log(this.fileInput.current.files[0]);
-	console.log(formData);
-
-	 const projectId = this.state.project;
-        const respon = await fetch(`http://127.0.0.1:8000/project/${projectId}`);
-        const jso = await respon.json();
-		console.log(jso);
-	for(let user in jso["project_members"])
-	{
-		console.log(jso["project_members"][user]);
-		let id = jso["project_members"][user];
-		const use = await fetch(`http://127.0.0.1:8000/user/${id}`);
-		const userdata = await use.json();
-		let em = userdata["email"]
-		const respon = await axios({url:'http://127.0.0.1:8000/user/sendemail',method:'GET' , params:{email:em , message:'An issue has been added to your project' , subject:'Addition of issue'}, withCredentials:true});
-        console.log(respon);
-	}
+	await  axios({url:'http://127.0.0.1:8000/bug/' ,method:'POST', data:formData , withCredentials:true } ).then(response=>{console.log(response)}).catch(error=>{this.setState({failed:true});})
+	const projectId = this.state.project;
+        const jso =await axios({url:`http://127.0.0.1:8000/project/${projectId}`,method:'GET',withCredentials:true}).then(response=>{return response.data}).catch(error=>{this.setState({failed:true})})
+        
+                console.log(jso);
+	 
+         for(let user in jso["project_members"])
+        {
+                console.log(jso["project_members"][user]);
+                let id = jso["project_members"][user];
+                const userdata = await axios({url:`http://127.0.0.1:8000/user/${id}`,method:'GET',withCredentials:true}).then(response=>{return response.data}).catch(error=>{this.setState({failed:true})})
+                
+                let em = userdata["email"]
+                await axios({url:'http://127.0.0.1:8000/user/sendemail',method:'GET' , params:{email:em , message:'An issue has been added to your project' , subject:'Addition of issue'}, withCredentials:true}).then(response=>{console.log(response)}).catch(error=>{this.setState({failed:true})})
+        }
 
 	this.setState({redirect:true});
+	
+	
 }
 
 
@@ -124,6 +122,10 @@ renderRedirect= () =>{
         if(this.state.redirect==true)
         {
                 return <Redirect to={{pathname:'/done'  }}/>
+        }
+	else if(this.state.failed==true)
+        {
+                return <Redirect to={{pathname:'/fail'  }}/>
         }
 }
 

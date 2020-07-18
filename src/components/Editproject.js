@@ -28,13 +28,14 @@ class Editproject extends Component
 		typeofuser:false,
 		userId:0,
 		isLoggedIn:false,
+		failed : false,
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
                 this.onEditorChange = this.onEditorChange.bind(this);
         }
 async componentDidMount()
 {
-	 const re = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
+	 const re = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
 
         const js = await re.data;
         this.setState({typeofuser:js.typeofuser})
@@ -52,8 +53,8 @@ async componentDidMount()
 
 
         const projectId = this.props.location.state.projectNumber;
-        const response = await fetch(`http://127.0.0.1:8000/project/${projectId}`);
-        const json = await response.json();
+        const response = await axios({url:`http://127.0.0.1:8000/project/${projectId}`,method:'GET' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
+        const json = await response.data;
         this.setState({data:json});
 
 	this.setState({project_name:this.state.data.project_name})
@@ -64,7 +65,7 @@ async componentDidMount()
 
 
 
-	const res = await axios({ url : 'http://127.0.0.1:8000/user/' , method:'get' , withCredentials:true})
+	const res = await axios({ url : 'http://127.0.0.1:8000/user/' , method:'get' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
 	
    	let arr = [];
         const ul = res.data;
@@ -108,14 +109,14 @@ handleMemberChange=(event , data) => {
     this.setState({project_members:opt});
 }
 
-handleSubmit = event => {
+handleSubmit = async(event) => {
   event.preventDefault()
    console.log(this.state.project_members)
   const projectId = this.props.location.state.projectNumber;
   let formData = { project_name: this.state.project_name, wiki: this.state.wiki , project_members:this.state.project_members }
-  const response = axios({url:`http://127.0.0.1:8000/project/${projectId}/` ,method:'PUT', data:formData , withCredentials:true} );
-  console.log(response);
-  this.setState({redirect:true});
+  await axios({url:`http://127.0.0.1:8000/project/${projectId}/` ,method:'PUT', data:formData , withCredentials:true} ).then(response=>{this.setState({redirect:true}); }).catch(error=>{this.setState({failed:true}); })
+
+  
 
 }
 
@@ -124,6 +125,11 @@ renderRedirect= () =>{
         {
                 return <Redirect to={{pathname:'/done'  }}/>
         }
+	else if(this.state.failed==true)
+        {
+                return <Redirect to={{pathname:'/fail'  }}/>
+        }
+
 }
 
 

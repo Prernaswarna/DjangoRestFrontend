@@ -11,13 +11,13 @@ class Individual extends Component
         constructor(props)
         {
                 super(props);
-                this.state = { data :[] , isDisplayed:false,typeofuser:false,userId:0 , isLoggedIn:false,redirect:false, users:[]};
+                this.state = { data :[] , isDisplayed:false,typeofuser:false,userId:0 , isLoggedIn:false,redirect:false, users:[] , failed:false};
         this.deleteProject = this.deleteProject.bind(this);
 
 	}
 async componentDidMount()
 {
-	const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
+	const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
 
         const js = await res.data;
         this.setState({typeofuser:js.typeofuser})
@@ -33,8 +33,8 @@ async componentDidMount()
         }
 
 	const projectId = this.props.location.state.projectNumber;
-        const response = await fetch(`http://127.0.0.1:8000/project/${projectId}`);
-        const json = await response.json();
+        const response = await axios({url:`http://127.0.0.1:8000/project/${projectId}`,method:'GET',withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
+        const json = response.data
         this.setState({data:json});
 	
 	console.log(this.state.data.project_members);
@@ -54,7 +54,7 @@ async componentDidMount()
 	for(let user in this.state.data.project_members)
 	{
 		let worth = this.state.data.project_members[user];
-		const worthy = await axios({url:`http://127.0.0.1:8000/user/${worth}`,method:'GET' , withCredentials:true});
+		const worthy = await axios({url:`http://127.0.0.1:8000/user/${worth}`,method:'GET' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
 		let w = await worthy.data;
 			console.log(w);
 		newarr.push(w["username"]);
@@ -68,9 +68,7 @@ async componentDidMount()
 deleteProject = event => {
   event.preventDefault()
 	const projectId = this.props.location.state.projectNumber;
-  const response = axios({url:`http://127.0.0.1:8000/project/${projectId}` ,method:'DELETE' , withCredentials:true} );
-  console.log(response);
-	  this.setState({redirect:true});
+  axios({url:`http://127.0.0.1:8000/project/${projectId}` ,method:'DELETE' , withCredentials:true} ).then(response=>{this.setState({redirect:true})}).catch(error=>{this.setState({failed:true})})
 
        
 }
@@ -79,6 +77,10 @@ renderRedirect= () =>{
         if(this.state.redirect==true)
         {
                 return <Redirect to={{pathname:'/deletedone'  }}/>
+        }
+	else if(this.state.failed==true)
+        {
+                return <Redirect to={{pathname:'/fail'  }}/>
         }
 }
 

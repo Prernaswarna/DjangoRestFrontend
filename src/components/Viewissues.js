@@ -21,7 +21,7 @@ class Viewissues extends Component
 async componentDidMount()
 {
 	const projectId = this.props.location.state.projectNumber;
-        const response = await axios({url:'http://127.0.0.1:8000/bug/',method:'GET' , withCredentials:true});
+        const response = await axios({url:'http://127.0.0.1:8000/bug/',method:'GET' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
         const json = await response.data;
         this.setState({projectlist:json});
        
@@ -37,7 +37,7 @@ async componentDidMount()
 		}
 	}
 	this.setState({arr:Newarr});
-	const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
+	const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
 
         const js = await res.data;
         this.setState({typeofuser:js.typeofuser})

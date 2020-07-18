@@ -11,34 +11,34 @@ class Individualissue extends Component
         constructor(props)
         {
                 super(props);
-                this.state = { data :[],projectinfo:[],isDisplayed:false,typeofuser:false,userId:0 , reportername:"" , assigneename:""};
+                this.state = { data :[],projectinfo:[],isDisplayed:false,typeofuser:false,userId:0 , reportername:"" , assigneename:"" , failed:false};
         	this.deleteIssue = this.deleteIssue.bind(this);
 	}
 async componentDidMount()
 {
         const issueId = this.props.location.state.issueId;
-        const response = await fetch(`http://127.0.0.1:8000/bug/${issueId}`);
+        const response = await axios({url:`http://127.0.0.1:8000/bug/${issueId}` , method:'GET' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
 	const projectId = this.props.location.state.projectNumber;
-	const res = await fetch(`http://127.0.0.1:8000/project/${projectId}`);
-        const json = await response.json();
-	const js = await res.json();
+	const res = await axios({url:`http://127.0.0.1:8000/project/${projectId}` , method:'GET' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
+        const json = await response.data;
+	const js = await res.data;
         this.setState({data:json});
 	this.setState({projectinfo:js});
 	
-	const reporterinfo = await fetch(`http://127.0.0.1:8000/user/${this.state.data.reporter}`);
-	const reporterjson = await reporterinfo.json();
+	const reporterinfo = await axios({url:`http://127.0.0.1:8000/user/${this.state.data.reporter}` , method:'GET' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
+	const reporterjson = await reporterinfo.data;
 	
 	this.setState({reportername:reporterjson.username});
 	
 	if(this.state.data.assignee!=null)
 	{
-		const assigneeinfo = await fetch(`http://127.0.0.1:8000/user/${this.state.data.assignee}`);
-        const assigneejson = await assigneeinfo.json();
+		const assigneeinfo = await axios({url:`http://127.0.0.1:8000/user/${this.state.data.assignee}` , method:'GET' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
+        const assigneejson = await assigneeinfo.data;
 
         this.setState({assigneename:assigneejson.username});
 
 	}
-	const resp = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
+	const resp = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
 
         const j = await resp.data;
         this.setState({typeofuser:j.typeofuser})
@@ -62,10 +62,7 @@ async componentDidMount()
 deleteIssue = event => {
   event.preventDefault()
         const issueId = this.props.location.state.issueId;
-  const response = axios({url:`http://127.0.0.1:8000/bug/${issueId}` ,method:'DELETE' , withCredentials:true} );
-  console.log(response);
-          this.setState({redirect:true});
-
+   axios({url:`http://127.0.0.1:8000/bug/${issueId}` ,method:'DELETE' , withCredentials:true} ).then(response=>{this.setState({redirect:true}); }).catch(error=>{this.setState({failed:true}); })
 
 }
 
@@ -74,6 +71,11 @@ renderRedirect= () =>{
         {
                 return <Redirect to={{pathname:'/deletedone'  }}/>
         }
+	 else if(this.state.failed==true)
+        {
+                return <Redirect to={{pathname:'/fail'  }}/>
+        }
+
 }
 
 

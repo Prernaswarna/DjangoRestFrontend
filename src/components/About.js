@@ -13,7 +13,7 @@ class About extends Component
 	}
 async componentDidMount()
 {
-	const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
+	const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
 
         const js =  await res.data;
         console.log(res.data);
@@ -31,8 +31,8 @@ async componentDidMount()
 
 
 	
-	const response = await fetch('http://127.0.0.1:8000/user/');
-	const json = await response.json();
+	const response = await axios({url:'http://127.0.0.1:8000/user/' , method:'GET' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
+	const json = await response.data;
 	this.setState({data:json});
 	console.log(json);
 }
@@ -40,11 +40,11 @@ async componentDidMount()
 changeType = async(id,event) => {
   event.preventDefault()
 	console.log(id);
-   const singleuser = await fetch(`http://127.0.0.1:8000/user/${id}`);
-   const userresponse = await singleuser.json();
+   const singleuser = await axios({url:`http://127.0.0.1:8000/user/${id}` , method:'GET' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
+   const userresponse = await singleuser.data;
 	 console.log(userresponse);
           let formData = { username: userresponse.username, email: userresponse.email , enroll:userresponse.enroll , typeofuser:true }
-  const response = axios({url:`http://127.0.0.1:8000/user/${userresponse.id}/` ,method:'PUT', data:formData , withCredentials:true} );
+  const response = axios({url:`http://127.0.0.1:8000/user/${userresponse.id}/` ,method:'PUT', data:formData , withCredentials:true} ).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
   console.log(response);
   this.setState({redirect:true});
 
@@ -53,11 +53,11 @@ changeType = async(id,event) => {
 adminType = async(id,event) => {
   event.preventDefault()
         console.log(id);
-   const singleadmin = await fetch(`http://127.0.0.1:8000/user/${id}`);
-   const adminresponse = await singleadmin.json();
+   const singleadmin = await axios({url:`http://127.0.0.1:8000/user/${id}` , method:'GET' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
+   const adminresponse = await singleadmin.data;
          console.log(adminresponse);
           let formData = { username: adminresponse.username, email: adminresponse.email , enroll:adminresponse.enroll , typeofuser:false }
-  const response = axios({url:`http://127.0.0.1:8000/user/${adminresponse.id}/` ,method:'PUT', data:formData , withCredentials:true} );
+  const response = axios({url:`http://127.0.0.1:8000/user/${adminresponse.id}/` ,method:'PUT', data:formData , withCredentials:true} ).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
   console.log(response);
   this.setState({redirect:true});
 

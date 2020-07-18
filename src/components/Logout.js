@@ -15,12 +15,12 @@ class Logout extends Component
 
 	async componentDidMount()
 	{
-		const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
+		const res = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
 
         const js = await res.data;
         this.setState({typeofuser:js.typeofuser})
         this.setState({userId:js.userId});
-	const response = await axios({url:'http://127.0.0.1:8000/user/logoutview' , method:'get' , withCredentials:true})
+	const response = await axios({url:'http://127.0.0.1:8000/user/logoutview' , method:'get' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
 	const json = await response.data;
 	this.setState({data:json.user});
 	}

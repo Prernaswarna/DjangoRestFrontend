@@ -3,6 +3,7 @@ import axios from 'axios';
 import ReactDOM from 'react-dom';
 import {Link} from 'react-router-dom';
 import {Button,Divider , Grid , Header , Segment , Label} from 'semantic-ui-react';
+import {Redirect} from 'react-router-dom';
 
 
 
@@ -11,74 +12,68 @@ class Mypage extends Component
         constructor(props)
         {
                 super(props);
-                this.state = { typeofuser:false , userId:0 ,projects :[], assigned:[] ,reported:[], projectlist:[] , issueslist:[] , isDisplayed:false};
+                this.state = { typeofuser:false , userId:0 ,projects :[], assigned:[] ,reported:[], projectlist:[] , issueslist:[] , isDisplayed:false , failed:false};
         }
 async componentDidMount()
 {
 	//console.log(this.props.location.state.typeofuser);
-	const getuser = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true})
+	const jsonuser = await axios({url:'http://127.0.0.1:8000/user/currentuser', method:'get' , withCredentials:true}).then(response=>{return response.data}).catch(error=>{this.setState({failed:true})})
 
-        const jsonuser =  await getuser.data;
-        console.log(getuser.data);
-        this.setState({typeofuser:jsonuser.typeofuser})
-        this.setState({userId:jsonuser.userId});
+        if(jsonuser!=undefined)
+	{
+        	this.setState({typeofuser:jsonuser.typeofuser})
+        	this.setState({userId:jsonuser.userId});
+	}
+        const json = await axios({url:'http://127.0.0.1:8000/project/',method:'GET' , withCredentials:true}).then(response=>{return response.data}).catch(error=>{this.setState({failed:true})})
+ 
+	const js = await axios({url:'http://127.0.0.1:8000/bug/',method:'GET' , withCredentials:true}).then(response=>{return response.data}).catch(error=>{this.setState({failed:true}) })
+        if(js!=undefined && json!=undefined)
+	{
+        	await this.setState({projectlist:json});
+		await this.setState({issueslist:js});
+  		let Newarr= [];
+        	for(let proj in this.state.projectlist)
+        	{
+			for(let user in this.state.projectlist[proj]["project_members"])
+			{
+                		if(this.state.projectlist[proj]["project_members"][user]  == this.state.userId)
+                		{
+                        		Newarr.push(this.state.projectlist[proj])
 
-        const response = await axios({url:'http://127.0.0.1:8000/project/',method:'GET' , withCredentials:true});
-        const json = await response.data;
-	const res = await axios({url:'http://127.0.0.1:8000/bug/',method:'GET' , withCredentials:true});
-        const js = await res.data;
-        await this.setState({projectlist:json});
-	await this.setState({issueslist:js});
-  	let Newarr= [];
-        for(let proj in this.state.projectlist)
-        {
-		for(let user in this.state.projectlist[proj]["project_members"])
-		{
-			
-		
-                if(this.state.projectlist[proj]["project_members"][user]  == this.state.userId)
-                {
-                        Newarr.push(this.state.projectlist[proj])
-
-                }
-		}
-        }
-         await this.setState({projects:Newarr});
-
+                		}
+			}
+        	}
+         	await this.setState({projects:Newarr});
 
 
 
-	let newarr= [];
-        for(let bug in this.state.issueslist)
-        {
-               
 
-                if(this.state.issueslist[bug]["reporter"]  == this.state.userId)
-                {
-                        newarr.push(this.state.issueslist[bug])
+		let newarr= [];
+        	for(let bug in this.state.issueslist)
+        	{
+                	if(this.state.issueslist[bug]["reporter"]  == this.state.userId)
+                	{
+                        	newarr.push(this.state.issueslist[bug])
 
-                }
-                
-        }
-         await this.setState({reported:newarr});
+                	} 
+        	}
+         	await this.setState({reported:newarr});
 
 
-	let arr= [];
-        for(let bug in this.state.issueslist)
-        {
+		let arr= [];
+        	for(let bug in this.state.issueslist)
+        	{
+                	if(this.state.issueslist[bug]["assignee"]  == this.state.userId)
+                	{
+                        	arr.push(this.state.issueslist[bug])
+                	}
 
+        	}
+         	await this.setState({assigned:arr});
 
-                if(this.state.issueslist[bug]["assignee"]  == this.state.userId)
-                {
-                        arr.push(this.state.issueslist[bug])
-
-                }
-
-        }
-         await this.setState({assigned:arr});
-
-	if(this.state.typeofuser==true)
-		await this.setState({isDisplayed:true})
+		if(this.state.typeofuser==true)
+			await this.setState({isDisplayed:true})
+	}
 	/*console.log(this.state.issueslist);
 	console.log(this.state.projectlist);
 	console.log(this.state.projects);
@@ -86,9 +81,15 @@ async componentDidMount()
 	console.log(this.state.reported);
 	console.log(this.props.location.state.userId);
 	console.log(this.props.location.state.typeofuser);*/
-	/*const respon = await axios({url:'http://127.0.0.1:8000/user/sendemail',method:'GET' , params:{email:'prernaswarna@gmail.com'}, withCredentials:true});
-	console.log(respon);*/
+	
 }
+renderRedirect= () =>{
+        if(this.state.failed==true)
+        {
+                return <Redirect to={{pathname:'/fail'  }}/>
+        }
+}
+
 
 render()
 {
@@ -99,7 +100,8 @@ render()
 	
         return (<div>
 		<div style={{padding:'2% 10% 2% 10%'}}><Header as='h2'>
-     <Header.Content>
+      {this.renderRedirect()}
+	<Header.Content>
       My Account
       <Header.Subheader>Important projects and issues</Header.Subheader>
     </Header.Content>
