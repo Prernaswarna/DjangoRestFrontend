@@ -109,7 +109,9 @@ render()
 		
 <div style={{padding:'5% 0px 0px 0px', textAlign:'center'}}>	
         <Button color='blue' as={Link} to={{pathname:"/viewissues",state:{projectNumber:this.state.data.id,projectname:this.state.data.project_name , typeofuser:this.state.typeofuser , userId:this.state.userId} }} >View All Issues</Button>
-	<label style={style}>  <Button color='green' as={Link} to={{pathname:"/editproject" , state:{projectNumber:this.state.data.id , typeofuser:this.state.typeofuser , userId:this.state.userId} }} >Edit Project</Button></label>
+	<Button color='black' as={Link} to={{pathname:"/reportbug" , state:{projectNumber:this.state.data.id} }} >Add Issue</Button>
+
+		<label style={style}>  <Button color='green' as={Link} to={{pathname:"/editproject" , state:{projectNumber:this.state.data.id , typeofuser:this.state.typeofuser , userId:this.state.userId} }} >Edit Project</Button></label>
 	<Button color='red' style={style} onClick={event=>this.deleteProject(event)} >Delete Project</Button>
 		</div>
 		{this.renderRedirect()}
