@@ -2,7 +2,7 @@ import React ,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import {Form} from 'semantic-ui-react';
-import {Segment ,Message, Grid , Header , Button} from 'semantic-ui-react';
+import {Icon ,Segment ,Message, Grid , Header ,Comment, Button} from 'semantic-ui-react';
 
 axios.defaults.xsrfCookieName = 'frontend_csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
@@ -77,6 +77,7 @@ check = () =>{
 		{this.state.data.map(el => (
 		<Message size='tiny'>
 		<Message.Header>
+			<Icon circular name='user'/>
 			User ID:{el.creator}
 		</Message.Header>
 		<p>
@@ -106,6 +107,7 @@ class Comments extends Component
                 body:"Not provided",
                 commentlist: [],
                 isLoggedIn:false,
+		users:[]
 		};
                 this.handleSubmit = this.handleSubmit.bind(this);
         }
@@ -127,7 +129,7 @@ class Comments extends Component
         {
                 this.setState({isLoggedIn:true});
         }
-
+	
 
 	 const response = await axios({url:'http://127.0.0.1:8000/comment/',method:'GET' , withCredentials:true}).then(response=>{return response}).catch(error=>{window.location.href="http://127.0.0.1:3000/fail"})
         const json = await response.data;
@@ -147,7 +149,7 @@ class Comments extends Component
 	console.log(this.state.commentlist);
 	
 	
-	}
+}
 
 handleBodyChange = event => {
   this.setState({
@@ -209,8 +211,9 @@ render()
 	<Button color='green' type="submit" >Submit</Button>
   </Form>
 	{this.state.commentlist.map(el=>(
-                <Message size='tiny'>
+                <Message size='tiny' >
                 <Message.Header>
+			<Icon circular name='user'/>
                         User ID:{el.creator}
                 </Message.Header>
                 <p>

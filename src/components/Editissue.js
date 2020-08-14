@@ -108,7 +108,8 @@ handleAssigneeChange = (event,data) => {
 
 
 handleStatusvalChange = event => {
-  this.setState({
+ console.log(event.target.value) 
+ this.setState({
     statusval: event.target.value
   })
 }

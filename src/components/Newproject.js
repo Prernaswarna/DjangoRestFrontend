@@ -154,7 +154,7 @@ render()
 
 	<Form.Field required>
 <label>Project Members</label>
-	<Dropdown name="project-members" onChange={(event,data) =>this.handleMemberChange(event , data)} placeholder="Select a category" fluid multiple selection options = {this.state.userlist}
+	<Dropdown name="project-members" onChange={(event,data) =>this.handleMemberChange(event , data)} placeholder="Select a category" fluid multiple search selection options = {this.state.userlist}
 />
   </Form.Field>
 

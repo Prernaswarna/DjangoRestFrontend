@@ -164,7 +164,7 @@ render()
 
         <Form.Field required>
 <label>Project Members</label>
-<Dropdown name="project-members" value={this.state.project_members} onChange={(event,data) =>this.handleMemberChange(event , data)}  fluid multiple selection options = {this.state.userlist}
+<Dropdown name="project-members" value={this.state.project_members} onChange={(event,data) =>this.handleMemberChange(event , data)}  fluid multiple search selection options = {this.state.userlist}
 />
   </Form.Field>
 

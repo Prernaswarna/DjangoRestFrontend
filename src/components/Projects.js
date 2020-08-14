@@ -66,7 +66,7 @@ render()
 	        <Grid.Column>
 		  <Segment raised>
         		<Label as='a' color='pink' ribbon>
-			Project Number:{el.id}
+			Project Id : {el.id}
 		  	</Label>
 		 
 		<span>
