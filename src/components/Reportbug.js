@@ -1,7 +1,7 @@
 import React ,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import {Form ,Header, Button} from 'semantic-ui-react';
+import {Form ,Header, Button , Radio} from 'semantic-ui-react';
 import {Redirect} from 'react-router-dom';
 
 
@@ -168,10 +168,12 @@ render()
       <input type="text"  value={this.state.userId} readonly/>
       </Form.Field>
 		
-	<Form.Field>	
-	<label>Status</label>
-      <input type="text"  value={this.state.statusval}  readonly />
-	</Form.Field>
+	<Form.Field>
+        <label>Status</label>
+        <Radio label='Unassigned' value='Unassigned' checked={this.state.statusval==='Unassigned'} defaultChecked disabled />
+        <Radio label='Assigned' value='Assigned' checked={this.state.statusval==='Assigned'} disabled />
+        </Form.Field>
+
 	
 	<label style={{fontWeight:'bold' ,fontSize:'13px'}}>Document</label>
 	<input type="file" ref={this.fileInput}/>

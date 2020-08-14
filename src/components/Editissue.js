@@ -1,7 +1,7 @@
 import React ,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import {Segment,Image ,Header,Button ,Form,Dropdown} from 'semantic-ui-react';
+import {Segment,Image ,Header,Button,Radio ,Form,Dropdown} from 'semantic-ui-react';
 import {Redirect} from 'react-router-dom';
 
 axios.defaults.xsrfCookieName = 'frontend_csrftoken'
@@ -107,10 +107,11 @@ handleAssigneeChange = (event,data) => {
 }
 
 
-handleStatusvalChange = event => {
- console.log(event.target.value) 
+handleStatusvalChange = (event, {value}) => {
+ 
+console.log({value}.value)
  this.setState({
-    statusval: event.target.value
+    statusval: {value}.value
   })
 }
 
@@ -201,11 +202,11 @@ render()
 
 	</Form.Field>
 
-
-        <Form.Field>
-        <label>Status</label>
-      <input type="text"  onChange={event => this.handleStatusvalChange(event)} value={this.state.statusval}   />
-        </Form.Field>
+	<Form.Field>
+	<label>Status</label>
+	<Radio label='Unassigned' value='Unassigned' checked={this.state.statusval==='Unassigned'} onChange={(event, {value}) => this.handleStatusvalChange(event , {value})} />
+	<Radio label='Assigned' value='Assigned' checked={this.state.statusval==='Assigned'} onChange={(event , {value}) => this.handleStatusvalChange(event , {value})} />
+	</Form.Field>
 
 	<label style={{fontWeight:'bold' ,fontSize:'13px'}}>Document <Image src={this.state.data.doc} size='small' /></label>
 

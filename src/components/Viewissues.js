@@ -76,7 +76,7 @@ render()
 
 		  {el.heading} : 
 		 </Link>
-		  <span style={{backgroundColor:'#ff69b4' ,color:'white', padding:'2px', margin:'2%' , border:'2px solid #ff69b4' , borderRadius:'4px'}}>{el.statusval}</span>
+		  <span style={{backgroundColor:'#ff99aa' ,color:'white', padding:'2px', margin:'2%' , border:'2px solid #ff99aa' , borderRadius:'4px'}}>{el.statusval}</span>
 		 </Segment>
 	     </Grid.Column>
 	

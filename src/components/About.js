@@ -85,7 +85,7 @@ render()
   </Header></div>
 
 	<div style={{padding:'1% 8% 3% 5%'}}>
-        <Grid columns={3} divided>
+        <Grid stackable columns={3} divided>
         <Grid.Row>
         <Grid.Column><span style={{fontWeight:'bold'}}>Username</span></Grid.Column>
         <Grid.Column><span style={{fontWeight:'bold'}}>Email Id</span></Grid.Column>
