@@ -177,16 +177,16 @@ render()
 
         <Form.Field >
         <label>Heading</label>
-      <input type="text"  value={this.state.heading} readonly/>
+      <input type="text"  value={this.state.heading} disabled readonly/>
       </Form.Field>
 <Form.Field>
         <label>Description</label>
-      <input type="text"   value={this.state.description} readonly/>
+      <input type="text"   value={this.state.description} disabled readonly/>
       </Form.Field>
 
         <Form.Field >
         <label>Tags</label>
-      <input type="text" value={this.state.tags} readonly/>
+      <input type="text" value={this.state.tags} disabled readonly/>
       </Form.Field>
 
         <Form.Field >

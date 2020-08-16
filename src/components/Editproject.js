@@ -184,9 +184,10 @@ class EditorPreview extends Component {
     render() {
         return (
             <div className="editor-preview">
-                <h2>Rendered content</h2>
+                <br /><h4>Rendered content</h4>
                 <div dangerouslySetInnerHTML={ { __html: this.props.data } }></div>
-            </div>
+        	<br />    
+	</div>
         );
     }
 }

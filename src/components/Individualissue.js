@@ -92,26 +92,26 @@ render()
     </Header.Content>
   </Header>
 		
-		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Issue Id :</span> {this.state.data.id}</Segment></div>
+		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'15px',fontFamily:'Arial , Helvetica , sans-serif'}}>Issue Id :</span> {this.state.data.id}</Segment></div>
 
-		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Project Id :</span> {this.state.data.project}</Segment></div>
+		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'15px',fontFamily:'Arial , Helvetica , sans-serif'}}>Project Id :</span> {this.state.data.project}</Segment></div>
 
-		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Project Name :</span> {this.props.location.state.projectNames}</Segment></div>
+		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'15px',fontFamily:'Arial , Helvetica , sans-serif'}}>Project Name :</span> {this.props.location.state.projectNames}</Segment></div>
 
-	<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Title :</span> {this.state.data.heading}</Segment></div>
+	<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'15px',fontFamily:'Arial , Helvetica , sans-serif'}}>Title :</span> {this.state.data.heading}</Segment></div>
 
-	<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Description :</span> {this.state.data.description}</Segment></div>
+	<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'15px',fontFamily:'Arial , Helvetica , sans-serif'}}>Description :</span> {this.state.data.description}</Segment></div>
 
-	<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Tags :</span> {this.state.data.tags}</Segment></div>
+	<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'15px',fontFamily:'Arial , Helvetica , sans-serif'}}>Tags :</span> {this.state.data.tags}</Segment></div>
 
-		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Status :</span> {this.state.data.statusval}</Segment></div>
+		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'15px',fontFamily:'Arial , Helvetica ,sans-serif'}}>Status :</span> {this.state.data.statusval}</Segment></div>
 
-<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Reporter :</span> {this.state.data.reporter}  {this.state.reportername}</Segment></div>
+<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'15px',fontFamily:'Arial , Helvetica ,sans-serif'}}>Reporter :</span> {this.state.data.reporter}  {this.state.reportername}</Segment></div>
 
-		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'17px',fontFamily:'Georgia serif'}}>Assignee :</span> {this.state.data.assignee}  {this.state.assigneename}</Segment></div>
+		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold', fontSize:'15px',fontFamily:'Arial , Helvetica , sans- serif'}}>Assignee :</span> {this.state.data.assignee}  {this.state.assigneename}</Segment></div>
 
 		
-		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold' , fontSize:'17px' , fontFamily:'Georgia serif'}}>Document :</span><Image src={this.state.data.doc} size='small' /></Segment></div>
+		<div style={{padding:'3% 10% 2% 10%'}}><Segment color='olive'><span style={{fontWeight:'bold' , fontSize:'15px' , fontFamily:'Arial , Helvetice , sans-serif'}}>Document :</span><Image src={this.state.data.doc} size='small' /></Segment></div>
 	<div style={{padding:'5% 0px 0px 0px', textAlign:'center'}}>
 	                      
         <Button color='green' style={style} as={Link} to={{pathname:"/editissue",state:{issueId:this.state.data.id, projectNumber:this.state.data.project} }} >Edit Issue</Button>
